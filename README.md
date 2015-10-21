@@ -2,14 +2,23 @@ Ho messo su 2 progetti java, giusto per aprire il git.
 Ovviamente ci conviene lavorare da subito in java 7, per essere più compatibili con Android.
 
 Come dicevamo oggi direi di organizzarci così:
+
 1 facciamo funzionare Server e Client con i relativi mock
+
 2 facciamo funzionare Server e Client(POJO,PC) tra loro
+
 3 portiamo il client su android
+
 4 Applicazione Android che si appggi al client e relativa logica
+
 5 Integrazione di Protelis 
+
 6 Modifica applicazione per lavorare con Proelis
+
 7 Testing 
+
 8 Esetensioni 
+
 9 Testing
 
 NOTE
