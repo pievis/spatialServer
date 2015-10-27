@@ -5,6 +5,9 @@ import it.isac.commons.interfaces.ILatLonPosition;
 public class LatLonPosition implements ILatLonPosition {
 
 	double lat, lon;
+	String positionType;
+	
+	public LatLonPosition(){}
 	
 	public LatLonPosition(double lat, double lon){
 		this.lat = lat;
@@ -28,5 +31,19 @@ public class LatLonPosition implements ILatLonPosition {
 	public double getLon() {
 		return lon;
 	}
+	
+	public String toString(){
+		return "[lat:"+lat+",lon:"+lon+"]";
+	}
 
+	public String getPositionType() {
+		return positionType;
+	}
+
+	public void setPositionType(String positionType) {
+		this.positionType = positionType;
+	}
+
+	
+	
 }

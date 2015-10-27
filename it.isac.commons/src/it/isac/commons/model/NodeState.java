@@ -12,16 +12,16 @@ import java.util.List;
  */
 public class NodeState {
 	
-	String positionType;
+	//String positionType;
 	IPosition position;
 	List<INodeValue> values;
 	List<ISensor> sensors;
-	public String getPositionType() {
-		return positionType;
-	}
-	public void setPositionType(String positionType) {
-		this.positionType = positionType;
-	}
+//	public String getPositionType() {
+//		return positionType;
+//	}
+//	public void setPositionType(String positionType) {
+//		this.positionType = positionType;
+//	}
 	public IPosition getPosition() {
 		return position;
 	}

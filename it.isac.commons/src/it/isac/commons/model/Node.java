@@ -12,6 +12,8 @@ public class Node {
 	String id;
 	NodeState state;
 
+	public Node(){}
+	
 	public Node(String id, NodeState state){
 		this.id = id;
 		this.state = state;

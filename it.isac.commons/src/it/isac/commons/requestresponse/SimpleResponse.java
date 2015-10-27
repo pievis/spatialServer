@@ -6,6 +6,8 @@ public class SimpleResponse {
 	String message;
 	Object data;
 	
+	public SimpleResponse(){}
+	
 	public SimpleResponse(boolean success, String message){
 		this.success = success;
 		this.message = message;
