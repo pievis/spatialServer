@@ -8,9 +8,14 @@ import it.isac.db.ISpatialDataBase;
 import it.isac.server.utils.UrlAttributes;
 
 import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+/**
+ * Restlet resource that encapsulates the concept of node in the network.
+ * @author Pievis
+ */
 public class NodeServerResource extends ServerResource implements INodeResource {
 
 	String nodeId;
@@ -23,7 +28,6 @@ public class NodeServerResource extends ServerResource implements INodeResource 
 		sb = DataBase.getInstance(); //get db instance
 	}
 	
-	//GET
 	public Node represent() {
 		Node node = sb.getNode(nodeId);
 		return node;

@@ -4,6 +4,7 @@ import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeState;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ISpatialDataBase {
@@ -28,7 +29,7 @@ public interface ISpatialDataBase {
 	 * @param searchCriteria
 	 * @return list of the nearest node to the point position
 	 */
-	public List<Node> getNeighbourhood(IPosition position, String searchCriteria);
+	public List<Node> getNeighbourhood(IPosition position, SearchCriteria searchCriteria);
 	
 	/**
 	 * 
@@ -37,4 +38,15 @@ public interface ISpatialDataBase {
 	 */
 	public boolean removeNode(String id);
 	
+	/**
+	 * 
+	 * @return all the nodes in the network
+	 */
+	public Collection<Node> getAllNodes();
+	
+//	/**
+//	 * **Implementation of this method must be thread safe.**
+//	 * @return an unique identifier for a new node in the network.
+//	 */
+//	public String getNewId();
 }

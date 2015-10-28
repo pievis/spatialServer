@@ -2,6 +2,7 @@ package it.isac.commons.interfaces;
 
 import it.isac.commons.model.LatLonPosition;
 import it.isac.commons.model.PositionType;
+import it.isac.commons.model.XYPosition;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -10,11 +11,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 			include = JsonTypeInfo.As.EXTERNAL_PROPERTY, 
 			//defaultImpl = LatLonPosition.class, //Uncomment only if necessary
 			property = "positionType" )
-//TODO add other position types
+//add other position types here for automatic parsing
 @JsonSubTypes({ @JsonSubTypes.Type(value = LatLonPosition.class,
-									name = PositionType.LATLON)})
+									name = PositionType.LATLON),
+				@JsonSubTypes.Type(value = XYPosition.class,
+									name = PositionType.XY)					
+									})
 public interface IPosition {
-
 	public String getPositionType();
+	public void setPositionType(String positionType);
 	public String toString();
 }

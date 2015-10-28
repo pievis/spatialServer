@@ -14,6 +14,12 @@ public interface INodeResource {
 	public Node represent();
 	
 	@Put
+	/**
+	 * Updates the state of the node based on its id.
+	 * If no node of specified id is found, the node is added to the network anyway.
+	 * @param node
+	 * @return a SimpleResponse.
+	 */
 	public SimpleResponse update(Node node);
 	
 	@Delete

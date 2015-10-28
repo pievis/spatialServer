@@ -1,10 +1,12 @@
 package it.isac.commons.requestresponse;
 
+import it.isac.commons.interfaces.IData;
+
 public class SimpleResponse {
 
 	boolean success;
 	String message;
-	Object data;
+	IData data;
 	
 	public SimpleResponse(){}
 	
@@ -28,10 +30,8 @@ public class SimpleResponse {
 	public Object getData() {
 		return data;
 	}
-	public void setData(Object data) {
+	public void setData(IData data) {
 		this.data = data;
 	}
-	
-	
 	
 }

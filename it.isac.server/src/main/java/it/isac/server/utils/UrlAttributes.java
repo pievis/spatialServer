@@ -9,8 +9,12 @@ public class UrlAttributes {
 	public final static String NODE_ID = "nodeId";
 	public final static String NET_ID = "modelId";
 	
+	public static String getRelNodesUrl(){
+		return "{"+NET_ID+"}/nodes/";
+	}
+	
 	public static String getRelNodeUrl(){
-		return "{"+NET_ID+"}/nodes/{"+NODE_ID+"}/";
+		return getRelNodesUrl()+"{"+NODE_ID+"}/";
 	}
 	
 	public static String getRelNodeNbrUrl(){
