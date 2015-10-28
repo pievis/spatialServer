@@ -16,8 +16,9 @@ import org.restlet.resource.ClientResource;
 public class ClientTest1 {
 	
 	public static void main(String[] args){
+		addNewNodeXY(2.0, 1.0);
 		//Test1();
-		testNbr();
+		//testNbr();
 	}
 	
 	//SearchCriteria sc = new RangeSearch(10.0, Unit.M);
