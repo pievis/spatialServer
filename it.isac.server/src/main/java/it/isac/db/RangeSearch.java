@@ -1,11 +1,15 @@
 package it.isac.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import it.isac.commons.model.Unit;
 
 public class RangeSearch extends SearchCriteria {
 
 	Unit unit;
 	double range;
+	
+	public RangeSearch(){}
 	
 	public RangeSearch(double range, Unit unit){
 		this.range = range;
@@ -44,6 +48,7 @@ public class RangeSearch extends SearchCriteria {
 		this.range = range;
 	}
 	
+	@JsonIgnore
 	public double getMeters(){
 		if(unit == Unit.M)
 			return range;
@@ -51,6 +56,7 @@ public class RangeSearch extends SearchCriteria {
 			return range / 1000;
 	}
 	
+	@JsonIgnore
 	public double getKms(){
 		if(unit == Unit.KM)
 			return range;

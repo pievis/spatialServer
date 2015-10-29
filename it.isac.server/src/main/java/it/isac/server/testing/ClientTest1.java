@@ -16,9 +16,20 @@ import org.restlet.resource.ClientResource;
 public class ClientTest1 {
 	
 	public static void main(String[] args){
-		addNewNodeXY(2.0, 1.0);
-		//Test1();
+		//addNewNodeXY(2.0, 1.0);
+		addNode0();
+		Test1();
 		//testNbr();
+	}
+	
+	static void addNode0(){
+		NodeState state = new NodeState();
+		state.setPosition(new XYPosition(1.1, 1.2));
+		Node node = new Node("0", state);
+		ClientResource service = new ClientResource("http://localhost:8111");
+		INodeResource nodeRes = service.getChild("/net0/nodes/0/", INodeResource.class);
+		nodeRes.update(node); //added the node
+		log("node 0 added");
 	}
 	
 	//SearchCriteria sc = new RangeSearch(10.0, Unit.M);
@@ -78,8 +89,8 @@ public class ClientTest1 {
 		
 		log("Update node status - ");
 		NodeState ns0 = new NodeState();
-		LatLonPosition oldPos = (LatLonPosition)node0.getState().getPosition();
-		LatLonPosition pos = new LatLonPosition(1.2 + oldPos.getLat() , 10 + oldPos.getLon());
+		XYPosition oldPos = (XYPosition)node0.getState().getPosition();
+		XYPosition pos = new XYPosition(1.2 + oldPos.getX() , 10 + oldPos.getY());
 		ns0.setPosition(pos);
 		node0.setState(ns0);
 		//PUT

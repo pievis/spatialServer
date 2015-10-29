@@ -1,5 +1,6 @@
 /**
- * Collection of class used to represent the requests and responses.
+ * Collection of classes used to represent the requests and responses
+ * of the spatial computing application.
  */
 /**
  * @author Pievis

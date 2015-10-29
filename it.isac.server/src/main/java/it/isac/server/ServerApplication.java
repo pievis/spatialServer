@@ -1,4 +1,4 @@
-package it.isac.server.testing;
+package it.isac.server;
 
 import it.isac.commons.model.Unit;
 import it.isac.db.DataBase;
@@ -14,26 +14,15 @@ import it.isac.server.utils.UrlAttributes;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
-import org.restlet.Server;
-import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 
 /**
  * This is a simple restlet application used for the spatial computing server.
  * @author Pievis
  */
-public class SimpleServerApplication extends Application {
-
-	public final static String BASE_URL = "http://localhost:8111/";
+public class ServerApplication extends Application {
 	
-	public static void main(String args[]) throws Exception{
-		
-		//Setup Server
-		Server server = new Server(Protocol.HTTP, 8111);
-		server.setNext(new SimpleServerApplication());
-		server.start();
-		System.out.println("started...");
-	}
+	final static String BASE_URL = "/";
 	
 	@Override
 	public Restlet createInboundRoot(){
@@ -46,12 +35,12 @@ public class SimpleServerApplication extends Application {
 				NodesServerResource.class);
 		router.attach(BASE_URL + UrlAttributes.getRelNodeNbrUrl(),
 				NeighboursServerResource.class);
-		//TODO test other resources
+		//TODO add other resources if necessary
 		return router; 
 	}
 	
-	public SimpleServerApplication(){
-		setName("Simple Server Test 1");
+	public ServerApplication(){
+		setName("Spatial Computing Mediator");
 		setAuthor("Pierluigi Montagna");
 		configure();
 	}

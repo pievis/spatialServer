@@ -3,6 +3,8 @@ package it.isac.db;
 public class NearestNSearch extends SearchCriteria {
 	int number;
 
+	public NearestNSearch(){}
+	
 	/**
 	 * Get the number of nearest node to retrieve in the search.
 	 * @return
