@@ -3,6 +3,7 @@ package it.isac.db;
 import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeState;
+import it.isac.db.search.SearchCriteria;
 
 import java.util.Collection;
 import java.util.List;

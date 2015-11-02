@@ -1,4 +1,4 @@
-package it.isac.db;
+package it.isac.db.search;
 
 public class NearestNSearch extends SearchCriteria {
 	int number;

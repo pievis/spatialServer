@@ -16,6 +16,11 @@ import it.isac.commons.requestresponse.SimpleResponse;
 
 import org.restlet.resource.ClientResource;
 
+
+/**
+ * It's only used to make some test, don't expect anything much.
+ * @author Pievis
+ */
 public class ClientTest1 {
 	
 	final static Logger LOGGER = Logger.getLogger("test");
@@ -24,7 +29,6 @@ public class ClientTest1 {
 		//addNewNodeXY(2.0, 1.0);
 		addNode0();
 		//Test1();
-		
 		testNbr();
 	}
 	

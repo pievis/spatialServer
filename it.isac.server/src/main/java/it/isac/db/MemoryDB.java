@@ -6,6 +6,9 @@ import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeState;
 import it.isac.commons.model.PositionType;
 import it.isac.commons.model.XYPosition;
+import it.isac.db.search.NearestNSearch;
+import it.isac.db.search.RangeSearch;
+import it.isac.db.search.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,12 +35,12 @@ public class MemoryDB implements ISpatialDataBase {
 		//addNode0();
 	}
 	
-	public Node getNode(String net, String id) {
+	public synchronized Node getNode(String net, String id) {
 		HashMap<String, Node> nodes = getNodes(net);
 		return nodes.get(id);
 	}
 
-	public void updateNodeState(String net, String id, NodeState state) {
+	public synchronized void updateNodeState(String net, String id, NodeState state) {
 		HashMap<String, Node> nodes = getNodes(net);
 		nodes.put(id, new Node(id, state));
 	}
@@ -53,20 +56,23 @@ public class MemoryDB implements ISpatialDataBase {
 		return null;
 	}
 
-	public boolean removeNode(String net, String id) {
+	public synchronized boolean removeNode(String net, String id) {
 		HashMap<String, Node> nodes = getNodes(net);
 		nodes.remove(id);
 		return true;
 	}
 
-	public Collection<Node> getAllNodes(String net) {
+	public synchronized Collection<Node> getAllNodes(String net) {
 		HashMap<String, Node> nodes = getNodes(net);
 		return nodes.values();
 	}
 	
 	//Search Methods
 	List<Node> rangeSearch(String net, IPosition position, RangeSearch rs){
-		HashMap<String, Node> nodes = getNodes(net);
+		HashMap<String, Node> nodes;
+		synchronized (this) {
+			nodes = getNodes(net); //synch so should be ok
+		}
 		ArrayList<Node> nbr = new ArrayList<Node>();
 		double meters = rs.getMeters();
 		String positionType = PositionType.LATLON;
@@ -80,15 +86,19 @@ public class MemoryDB implements ISpatialDataBase {
 					//Distance between geo coordinates
 					double distance = LatLonPosition.distance((LatLonPosition) position,
 							(LatLonPosition) np, rs.getUnit());
-					if(distance < rs.getRange())
+					if(distance < rs.getRange()){
+						//log("distance: " + distance + " r:" + rs.getRange());
 						nbr.add(n);
+					}
 				}
 				if(npt.equals(PositionType.XY)){
 					//Distance between xy coordinates
 					double distance = XYPosition.distance((XYPosition) position,
 							(XYPosition) np);
-					if(distance < meters)
+					if(distance < meters){
+						//log(n.getId()+"\ndistance: " + distance + " meters:" + meters);
 						nbr.add(n);
+					}
 				}
 			}
 			else{
@@ -114,6 +124,7 @@ public class MemoryDB implements ISpatialDataBase {
 	}
 	
 	void log(String s){
+		//System.out.println(s);
 		LOGGER.warning(s);
 	}
 	

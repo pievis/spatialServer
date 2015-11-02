@@ -1,6 +1,7 @@
 package it.isac.server.utils;
 
-import it.isac.db.SearchCriteria;
+import it.isac.commons.model.PositionType;
+import it.isac.db.search.SearchCriteria;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class ServerConfig {
 	static String versionName = "1.0v";
 	static String description = "";
 	static String loggerFilesFolder="./logs/";
+	//static String positionSystem=PositionType.LATLON;
 	
 	/**
 	 * Port number that the server listen to
@@ -106,6 +108,7 @@ public class ServerConfig {
 			searchCriteria = config.getSearchCriteria();
 			portNumber = config.getPortNumber();
 			loggerFilesFolder = config.getLoggerFilesDir();
+			//positionSystem = config.getPositionSystem();
 		} catch (Exception e){
 			LOGGER.log(Level.WARNING, "Error during config.ini parsing", e);
 			e.printStackTrace();
@@ -120,6 +123,7 @@ public class ServerConfig {
 		config.searchCriteria = getSearchCriteria();
 		config.versionName = versionName;
 		config.loggerFilesDir = loggerFilesFolder;
+		//config.positionSystem = positionSystem;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			File f = new File(CONFIG_FILE_NAME);

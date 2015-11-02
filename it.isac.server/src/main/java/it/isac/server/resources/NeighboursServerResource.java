@@ -6,7 +6,7 @@ import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
 import it.isac.db.DataBase;
 import it.isac.db.ISpatialDataBase;
-import it.isac.db.SearchCriteria;
+import it.isac.db.search.SearchCriteria;
 import it.isac.server.utils.ServerConfig;
 import it.isac.server.utils.UrlAttributes;
 

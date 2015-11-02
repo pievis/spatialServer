@@ -1,4 +1,4 @@
-package it.isac.db;
+package it.isac.db.search;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

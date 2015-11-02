@@ -1,6 +1,5 @@
-package it.isac.db;
+package it.isac.db.search;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import it.isac.commons.model.Unit;
