@@ -11,24 +11,30 @@ public class DataBase implements ISpatialDataBase {
 
 	static ISpatialDataBase impl;
 	
+	public DataBase(ISpatialDataBase impl){
+		this.impl = impl;
+	}
+	
+	public DataBase(){}
+	
 	public void SetImplementation(ISpatialDataBase impl){
 		this.impl = impl;
 	}
 	
-	public Node getNode(String id) {
-		return impl.getNode(id);
+	public Node getNode(String net, String id) {
+		return impl.getNode(net, id);
 	}
 
-	public void updateNodeState(String id, NodeState state) {
-		impl.updateNodeState(id, state);
+	public void updateNodeState(String net, String id, NodeState state) {
+		impl.updateNodeState(net, id, state);
 	}
 
-	public List<Node> getNeighbourhood(IPosition position, SearchCriteria searchCriteria) {
-		return impl.getNeighbourhood(position, searchCriteria);
+	public List<Node> getNeighbourhood(String net, IPosition position, SearchCriteria searchCriteria) {
+		return impl.getNeighbourhood(net, position, searchCriteria);
 	}
 
-	public boolean removeNode(String id) {
-		return impl.removeNode(id);
+	public boolean removeNode(String net, String id) {
+		return impl.removeNode(net, id);
 	}
 	
 	//Singleton
@@ -40,8 +46,8 @@ public class DataBase implements ISpatialDataBase {
 		return impl;
 	}
 
-	public Collection<Node> getAllNodes() {
-		return impl.getAllNodes();
+	public Collection<Node> getAllNodes(String net) {
+		return impl.getAllNodes(net);
 	}
 
 //	public String getNewId() {

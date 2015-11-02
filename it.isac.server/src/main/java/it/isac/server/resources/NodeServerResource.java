@@ -1,5 +1,8 @@
 package it.isac.server.resources;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import it.isac.commons.interfaces.resources.INodeResource;
 import it.isac.commons.model.Node;
 import it.isac.commons.requestresponse.SimpleResponse;
@@ -18,28 +21,34 @@ import org.restlet.resource.ServerResource;
  */
 public class NodeServerResource extends ServerResource implements INodeResource {
 
-	String nodeId;
+	
+	Logger logger;
+	String nodeId, netId;
 	ISpatialDataBase sb;
 	
 	@Override
 	protected void doInit() throws ResourceException{
 		//Get the nodeId from the url
 		nodeId = getAttribute(UrlAttributes.NODE_ID);
+		netId = getAttribute(UrlAttributes.NET_ID);
 		sb = DataBase.getInstance(); //get db instance
+		logger = getLogger();
 	}
 	
 	public Node represent() {
-		Node node = sb.getNode(nodeId);
+		Node node = sb.getNode(netId, nodeId);
 		return node;
 	}
 
 	public SimpleResponse update(Node node) {
 		SimpleResponse sr;
 		try{
-			sb.updateNodeState(node.getId(), node.getState());
+			sb.updateNodeState(netId, node.getId(), node.getState());
 			sr = new SimpleResponse(true, "Node updated");
 		}catch(Exception e){
-			e.printStackTrace();
+			String err = "Error during the update of the node.\n" +
+					"Uri: " + getReference().toString();
+			logger.log(Level.SEVERE, err, e);
 			sr = new SimpleResponse(false, "Error " + e.getMessage());
 		}
 		return sr;

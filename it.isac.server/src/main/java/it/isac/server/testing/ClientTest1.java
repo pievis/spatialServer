@@ -1,6 +1,8 @@
 package it.isac.server.testing;
 
 
+import java.util.logging.Logger;
+
 import it.isac.commons.interfaces.resources.INeighboursResource;
 import it.isac.commons.interfaces.resources.INodeResource;
 import it.isac.commons.interfaces.resources.INodesResource;
@@ -11,15 +13,19 @@ import it.isac.commons.model.NodeState;
 import it.isac.commons.model.XYPosition;
 import it.isac.commons.requestresponse.IdClass;
 import it.isac.commons.requestresponse.SimpleResponse;
+
 import org.restlet.resource.ClientResource;
 
 public class ClientTest1 {
 	
+	final static Logger LOGGER = Logger.getLogger("test");
+	
 	public static void main(String[] args){
 		//addNewNodeXY(2.0, 1.0);
 		addNode0();
-		Test1();
-		//testNbr();
+		//Test1();
+		
+		testNbr();
 	}
 	
 	static void addNode0(){
@@ -114,7 +120,7 @@ public class ClientTest1 {
 	}
 	
 	static void log(String s){
-		System.out.println(s);
+		LOGGER.info(s);
 	}
 
 }

@@ -1,16 +1,18 @@
 package it.isac.server;
 
-import it.isac.commons.model.Unit;
 import it.isac.db.DataBase;
 import it.isac.db.MemoryDB;
-import it.isac.db.RangeSearch;
-import it.isac.db.SearchCriteria;
 import it.isac.server.resources.NeighboursServerResource;
 import it.isac.server.resources.NodeServerResource;
 import it.isac.server.resources.NodesServerResource;
 import it.isac.server.resources.RootServerResource;
 import it.isac.server.utils.ServerConfig;
 import it.isac.server.utils.UrlAttributes;
+
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -23,6 +25,7 @@ import org.restlet.routing.Router;
 public class ServerApplication extends Application {
 	
 	final static String BASE_URL = "/";
+	final static Logger LOGGER = Logger.getLogger(ServerApplication.class.getName());
 	
 	@Override
 	public Restlet createInboundRoot(){
@@ -50,8 +53,22 @@ public class ServerApplication extends Application {
 		DataBase sb = new DataBase();
 		sb.SetImplementation(new MemoryDB());
 		//Set server parameters
-		//Set search criteria for nbr
-		SearchCriteria sc = new RangeSearch(10.0, Unit.M);
-		ServerConfig.setSearchCriteria(sc);
+		//Load Server configuration from file
+		ServerConfig.loadFromConfigFile();
+		try {
+			configureLogger();
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Error during logger configuration.", e);
+		}
+	}
+	
+	void configureLogger() throws SecurityException, IOException{
+		ServerConfig.generateLoggerDir();
+//		String dir = ServerConfig.getLoggerFilesFolder();
+//		LOGGER.info("Setted logger dir: " + dir);
+//		//Set a global file handler for the logger
+//		FileHandler fileHandler = new FileHandler(dir + "logfile%g.log", 5242880, 5, true);
+//		fileHandler.setLevel(Level.ALL);
+//		Logger.getGlobal().addHandler(fileHandler);
 	}
 }

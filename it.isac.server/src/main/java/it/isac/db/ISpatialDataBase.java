@@ -11,38 +11,41 @@ public interface ISpatialDataBase {
 	
 	/**
 	 * 
+	 * @param net the network name identifier
 	 * @param id
 	 * @return The node specified by the id.
 	 */
-	public Node getNode(String id);
+	public Node getNode(String net, String id);
 	
 	/**
 	 * Updates the state of the node.
+	 * @param net the network name identifier
 	 * @param id : Id of the node
 	 * @param state : State of the node
 	 */
-	public void updateNodeState(String id, NodeState state);
+	public void updateNodeState(String net, String id, NodeState state);
 	
 	/**
-	 * Returns the list of nodes in the "spatial" area specified by the searchCriteria 
+	 * Returns the list of nodes in the "spatial" area specified by the searchCriteria
+	 * @param net the network name identifier 
 	 * @param position
 	 * @param searchCriteria
 	 * @return list of the nearest node to the point position
 	 */
-	public List<Node> getNeighbourhood(IPosition position, SearchCriteria searchCriteria);
+	public List<Node> getNeighbourhood(String net, IPosition position, SearchCriteria searchCriteria);
 	
 	/**
-	 * 
+	 * @param net the network name identifier
 	 * @param id
 	 * @return true if it's succefully removed
 	 */
-	public boolean removeNode(String id);
+	public boolean removeNode(String net, String id);
 	
 	/**
-	 * 
+	 * @param net the network name identifier
 	 * @return all the nodes in the network
 	 */
-	public Collection<Node> getAllNodes();
+	public Collection<Node> getAllNodes(String net);
 	
 //	/**
 //	 * **Implementation of this method must be thread safe.**

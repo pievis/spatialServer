@@ -4,11 +4,19 @@ import it.isac.db.SearchCriteria;
 
 //Configuration POJO used for serialization/deserialization
 public class ConfigPOJO {
-	String name, description, versionName;
+	String name, description, versionName, loggerFilesDir;
 	int portNumber;
 	SearchCriteria searchCriteria;
 
 	public ConfigPOJO() {
+	}
+	
+	public String getLoggerFilesDir() {
+		return loggerFilesDir;
+	}
+
+	public void setLoggerFilesDir(String loggerFilesDir) {
+		this.loggerFilesDir = loggerFilesDir;
 	}
 
 	public String getName() {

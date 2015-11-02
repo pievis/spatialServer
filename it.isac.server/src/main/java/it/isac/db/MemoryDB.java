@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Simple DB that stores the information in memory.
@@ -19,26 +20,32 @@ import java.util.List;
  */
 public class MemoryDB implements ISpatialDataBase {
 
-	HashMap<String, Node> nodes;
+	final static Logger LOGGER = Logger.getLogger(MemoryDB.class.getName());
+	
+	HashMap<String, HashMap<String, Node>> nets;
+	//HashMap<String, Node> nodes;
 	
 	public MemoryDB(){
-		nodes = new HashMap<String, Node>();
+		nets = new HashMap<String, HashMap<String, Node>>();
+		//nodes = new HashMap<String, Node>();
 		//Add a node for testing
 		//addNode0();
 	}
 	
-	public Node getNode(String id) {
+	public Node getNode(String net, String id) {
+		HashMap<String, Node> nodes = getNodes(net);
 		return nodes.get(id);
 	}
 
-	public void updateNodeState(String id, NodeState state) {
+	public void updateNodeState(String net, String id, NodeState state) {
+		HashMap<String, Node> nodes = getNodes(net);
 		nodes.put(id, new Node(id, state));
 	}
 
-	public List<Node> getNeighbourhood(IPosition position, SearchCriteria searchCriteria) {
+	public List<Node> getNeighbourhood(String net, IPosition position, SearchCriteria searchCriteria) {
 		
 		if(searchCriteria instanceof RangeSearch){
-			return rangeSearch(position, (RangeSearch) searchCriteria);
+			return rangeSearch(net, position, (RangeSearch) searchCriteria);
 		}
 		if(searchCriteria instanceof NearestNSearch){
 			throw new UnsupportedOperationException();
@@ -46,17 +53,20 @@ public class MemoryDB implements ISpatialDataBase {
 		return null;
 	}
 
-	public boolean removeNode(String id) {
+	public boolean removeNode(String net, String id) {
+		HashMap<String, Node> nodes = getNodes(net);
 		nodes.remove(id);
 		return true;
 	}
 
-	public Collection<Node> getAllNodes() {
+	public Collection<Node> getAllNodes(String net) {
+		HashMap<String, Node> nodes = getNodes(net);
 		return nodes.values();
 	}
 	
 	//Search Methods
-	List<Node> rangeSearch(IPosition position, RangeSearch rs){
+	List<Node> rangeSearch(String net, IPosition position, RangeSearch rs){
+		HashMap<String, Node> nodes = getNodes(net);
 		ArrayList<Node> nbr = new ArrayList<Node>();
 		double meters = rs.getMeters();
 		String positionType = PositionType.LATLON;
@@ -82,19 +92,38 @@ public class MemoryDB implements ISpatialDataBase {
 				}
 			}
 			else{
-				System.out.println("Ignored node " + n.getId());
+				log("Ignored node " + n.getId() + " during range search");
 			}
 		}
 		return nbr;
 	}
 	
-	//For testing
-	void addNode0(){
-		NodeState state = new NodeState();
-		LatLonPosition p = new LatLonPosition(0, 0);
-		state.setPosition(p);
-		state.setValues(new ArrayList());
-		state.setSensors(new ArrayList());
-		nodes.put("0", new Node("0", state));
+	
+	/**
+	 * Get the nodes of the specified network
+	 * @param netId
+	 * @return 
+	 */
+	HashMap<String, Node> getNodes(String netId){
+		HashMap<String, Node> nodes = nets.get(netId);
+		if(nodes == null){
+			nodes = new HashMap<String, Node>();
+			nets.put(netId, nodes);
+		}
+		return nodes;
 	}
+	
+	void log(String s){
+		LOGGER.warning(s);
+	}
+	
+	//For testing
+//	void addNode0(){
+//		NodeState state = new NodeState();
+//		LatLonPosition p = new LatLonPosition(0, 0);
+//		state.setPosition(p);
+//		state.setValues(new ArrayList());
+//		state.setSensors(new ArrayList());
+//		nodes.put("0", new Node("0", state));
+//	}
 }

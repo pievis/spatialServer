@@ -19,20 +19,21 @@ public class NeighboursServerResource extends ServerResource implements INeighbo
 
 	ISpatialDataBase sb;
 	SearchCriteria sc;
-	String nodeId;
+	String nodeId, netId;
 	
 	@Override
 	protected void doInit() throws ResourceException{
 		sb = DataBase.getInstance(); //get db instance
 		sc = ServerConfig.getSearchCriteria(); //get def search criteria
 		nodeId = getAttribute(UrlAttributes.NODE_ID);
+		netId = getAttribute(UrlAttributes.NET_ID);
 	}
 	
 	public NodeList represent() {
 		//Get position of the node
-		Node n = sb.getNode(nodeId);
+		Node n = sb.getNode(netId, nodeId);
 		IPosition pos = n.getState().getPosition();
-		List<Node> nbr = sb.getNeighbourhood(pos, sc);
+		List<Node> nbr = sb.getNeighbourhood(netId, pos, sc);
 		return new NodeList(nbr);
 	}
 

@@ -1,6 +1,7 @@
 package it.isac.server.resources;
 
 import java.util.Collection;
+
 import it.isac.commons.interfaces.resources.INodesResource;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
@@ -10,6 +11,7 @@ import it.isac.commons.requestresponse.SimpleResponse;
 import it.isac.db.DataBase;
 import it.isac.db.ISpatialDataBase;
 import it.isac.server.utils.UniqueIDGetter;
+import it.isac.server.utils.UrlAttributes;
 
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
@@ -20,14 +22,16 @@ import org.restlet.resource.ServerResource;
 public class NodesServerResource extends ServerResource implements INodesResource {
 
 	ISpatialDataBase sb;
+	String netId;
 	
 	@Override
 	protected void doInit() throws ResourceException{
 		sb = DataBase.getInstance(); //get db instance
+		netId = getAttribute(UrlAttributes.NET_ID);
 	}
 	
 	public NodeList represent() {
-		Collection<Node> nodes = sb.getAllNodes();
+		Collection<Node> nodes = sb.getAllNodes(netId);
 		return new NodeList(nodes);
 	}
 
@@ -36,7 +40,7 @@ public class NodesServerResource extends ServerResource implements INodesResourc
 		String id = UniqueIDGetter.gen();
 		
 		//add the node to the db
-		sb.updateNodeState(id, nodeState);
+		sb.updateNodeState(netId, id, nodeState);
 		
 		//return the generated id to the client
 		SimpleResponse sr = new SimpleResponse(true, "New node added to the network");
