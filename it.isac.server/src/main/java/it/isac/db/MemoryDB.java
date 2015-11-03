@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 
 /**
  * Simple DB that stores the information in memory.
+ * *Note: Nodes don't expire using this implementation, this is for testing mostly.
  * @author Pievis
- *
  */
 public class MemoryDB implements ISpatialDataBase {
 

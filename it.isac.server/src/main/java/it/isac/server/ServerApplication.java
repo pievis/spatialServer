@@ -2,6 +2,7 @@ package it.isac.server;
 
 import it.isac.db.DataBase;
 import it.isac.db.MemoryDB;
+import it.isac.db.RedisDB;
 import it.isac.server.resources.NeighboursServerResource;
 import it.isac.server.resources.NodeServerResource;
 import it.isac.server.resources.NodesServerResource;
@@ -51,7 +52,11 @@ public class ServerApplication extends Application {
 	void configure(){
 		//Setup db
 		DataBase sb = new DataBase();
-		sb.SetImplementation(new MemoryDB());
+		//sb.SetImplementation(new MemoryDB());
+		String clientPort = "6379";
+		String clientUrl = "redis://192.168.56.101:" + clientPort;
+		RedisDB db = new RedisDB(clientUrl);
+		sb.SetImplementation(db);
 		//Set server parameters
 		//Load Server configuration from file
 		ServerConfig.loadFromConfigFile();
