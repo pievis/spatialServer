@@ -50,15 +50,8 @@ public class ServerApplication extends Application {
 	}
 	
 	void configure(){
-		//Setup db
-		DataBase sb = new DataBase();
-		//sb.SetImplementation(new MemoryDB());
-		String clientPort = "6379";
-		String clientUrl = "redis://192.168.56.101:" + clientPort;
-		RedisDB db = new RedisDB(clientUrl);
-		sb.SetImplementation(db);
-		//Set server parameters
 		//Load Server configuration from file
+			//Which now include db server configuration
 		ServerConfig.loadFromConfigFile();
 		try {
 			configureLogger();

@@ -90,6 +90,22 @@ public class RedisDB implements ISpatialDataBase {
 		return console;
 	}
 
+	public boolean useExpiration() {
+		return useExpiration;
+	}
+
+	public void setUseExpiration(boolean useExpiration) {
+		this.useExpiration = useExpiration;
+	}
+
+	public long getExpirationSeconds() {
+		return expirationSeconds;
+	}
+
+	public void setExpirationSeconds(long expirationSeconds) {
+		this.expirationSeconds = expirationSeconds;
+	}
+
 	//
 	// DB Interface
 	// ///////////////////////////////////////////////////////////////////////
@@ -182,15 +198,20 @@ public class RedisDB implements ISpatialDataBase {
 	}
 
 	List<Node> rangeSearch(String net, LatLonPosition position, RangeSearch rs) {
-		
+
 		RedisCommands<String, String> console = getConsole();
 
 		double distance = rs.getMeters();
+		LOGGER.fine("Starting geoquery\n\tpoint: " + position.toString()
+				+ "\n\trange: " + distance + " m");
 		// get the ids of the nodes in the range
 		Set<String> points = console.georadius(net, position.getLon(),
 				position.getLat(), distance, GeoArgs.Unit.m);
+
 		Collection<Node> ns = getNodesFromIds(new ArrayList<String>(points),
 				net);
+		LOGGER.fine("Gotten " + points.size() + " points\nRemoved: "
+				+ (points.size() - ns.size()));
 		List<Node> nodes = new ArrayList<Node>(ns);
 		return nodes;
 	}
@@ -219,7 +240,10 @@ public class RedisDB implements ISpatialDataBase {
 			String json = console.get(ukey);
 			if (json == null) {
 				// node might be expired
-				console.zrem(net, new String[] { id });
+				long removed = console.zrem(net, new String[] { id });
+				if (removed <= 0)
+					LOGGER.warning("No node removed for id " + id + " and net "
+							+ net);
 			} else {
 				try {
 					Node n = mapper.readValue(json, Node.class);

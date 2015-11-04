@@ -1,14 +1,17 @@
-package it.isac.server.utils;
+package it.isac.server.utils.config;
 
 import it.isac.db.search.SearchCriteria;
 
 //Configuration POJO used for serialization/deserialization
 public class ConfigPOJO {
+	
 	String name, description, versionName, loggerFilesDir;
 	int portNumber;
 	SearchCriteria searchCriteria;
 //	String positionSystem;
-	//TODO add the properties for the DataBase
+	//properties for the DataBase
+	DBConfig dbConfig;
+	
 
 	public ConfigPOJO() {
 	}
@@ -68,4 +71,14 @@ public class ConfigPOJO {
 	public void setSearchCriteria(SearchCriteria searchCriteria) {
 		this.searchCriteria = searchCriteria;
 	}
+
+	public DBConfig getDbConfig() {
+		return dbConfig;
+	}
+
+	public void setDbConfig(DBConfig dbConfig) {
+		this.dbConfig = dbConfig;
+	}
+	
+	
 }

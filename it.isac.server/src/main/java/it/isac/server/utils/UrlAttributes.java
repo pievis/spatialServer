@@ -20,4 +20,8 @@ public class UrlAttributes {
 	public static String getRelNodeNbrUrl(){
 		return getRelNodeUrl() + "nbr/";
 	}
+	
+	public static String getRelNetUrl(){
+		return "{"+NET_ID+"}/";
+	}
 }

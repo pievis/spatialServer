@@ -1,7 +1,14 @@
 package it.isac.server.utils;
 
 import it.isac.commons.model.PositionType;
+import it.isac.db.DataBase;
+import it.isac.db.MemoryDB;
+import it.isac.db.RedisDB;
 import it.isac.db.search.SearchCriteria;
+import it.isac.server.utils.config.ConfigPOJO;
+import it.isac.server.utils.config.DBConfig;
+import it.isac.server.utils.config.DBMemoryConfig;
+import it.isac.server.utils.config.DBRedisConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +103,8 @@ public class ServerConfig {
 	
 
 	/**
-	 * Load Server configuration properties from the config.ini file
+	 * Load Server configuration properties from the config.ini file.
+	 * The class also setup the server database.
 	 */
 	public static void loadFromConfigFile(){
 		ObjectMapper mapper = new ObjectMapper();
@@ -109,6 +117,37 @@ public class ServerConfig {
 			portNumber = config.getPortNumber();
 			loggerFilesFolder = config.getLoggerFilesDir();
 			//positionSystem = config.getPositionSystem();
+			LOGGER.info("Loaded configuration from file\n-----");
+			LOGGER.info(name + " " + description + " " + versionName);
+			LOGGER.info("port number: " + portNumber);
+			LOGGER.info("log folder: " + loggerFilesFolder);
+			DBConfig dbconfig = config.getDbConfig();
+			if(dbconfig != null){
+				//Here to add new db cases if necessary
+				if(dbconfig instanceof DBRedisConfig){
+					LOGGER.info("Db type: Redis");
+					DBRedisConfig rcf = (DBRedisConfig) dbconfig;
+					String url = rcf.getUrl();
+					String port = rcf.getPort();
+					RedisDB db = new RedisDB(url, port);
+					db.setExpirationSeconds(rcf.getExpirationSeconds());
+					db.setUseExpiration(rcf.isUseExpiration());
+					new DataBase(db);
+					LOGGER.info("url: " + url);
+					LOGGER.info("port: " + port);
+					if(rcf.isUseExpiration())
+						LOGGER.info("expiration time (s): " + rcf.getExpirationSeconds());
+				}else/* if(dbconfig instanceof DBMemoryConfig)*/{
+					//base case
+					LOGGER.info("Db type: Memory");
+					new DataBase(new MemoryDB());
+				}
+			}else{
+				LOGGER.info("Db type: Memory");
+				new DataBase(new MemoryDB());
+				LOGGER.log(Level.WARNING, "No db configuration found in config.ini");
+			}
+			LOGGER.info("-----");
 		} catch (Exception e){
 			LOGGER.log(Level.WARNING, "Error during config.ini parsing", e);
 			e.printStackTrace();
@@ -117,12 +156,19 @@ public class ServerConfig {
 	
 	static void genConfigFile(){
 		ConfigPOJO config = new ConfigPOJO();
-		config.description = description;
-		config.name = name;
-		config.portNumber = portNumber;
-		config.searchCriteria = getSearchCriteria();
-		config.versionName = versionName;
-		config.loggerFilesDir = loggerFilesFolder;
+		config.setDescription(description);
+		config.setName(name);
+		config.setPortNumber(portNumber);
+		config.setSearchCriteria(getSearchCriteria());
+		config.setVersionName(versionName);
+		config.setLoggerFilesDir(loggerFilesFolder);
+		//Redis Config def
+		DBRedisConfig dbconfig = new DBRedisConfig();
+		dbconfig.setPort("6379");
+		dbconfig.setUrl("redis://192.168.56.101");
+		dbconfig.setUseExpiration(true);
+		dbconfig.setExpirationSeconds(60);
+		config.setDbConfig(dbconfig);
 		//config.positionSystem = positionSystem;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -151,9 +197,9 @@ public class ServerConfig {
 	
 	//For generating and loading test
 	public static void main(String[] args){
-		genConfigFile();
+		//genConfigFile();
 		loadFromConfigFile();
-		System.out.println(name + "\n" + description);
+		//System.out.println(name + "\n" + description);
 	}
 	
 	

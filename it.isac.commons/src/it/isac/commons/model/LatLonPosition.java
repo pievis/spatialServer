@@ -53,7 +53,7 @@ public class LatLonPosition implements ILatLonPosition {
 			dist = dist * 1.609344;
 		}
 		if (unit == Unit.M) {
-			dist = dist * 1.609344 / 1000;
+			dist = dist * 1.609344 * 1000;
 		}
 		return dist;
 	}
