@@ -163,11 +163,12 @@ public class ServerConfig {
 		config.setVersionName(versionName);
 		config.setLoggerFilesDir(loggerFilesFolder);
 		//Redis Config def
-		DBRedisConfig dbconfig = new DBRedisConfig();
-		dbconfig.setPort("6379");
-		dbconfig.setUrl("redis://192.168.56.101");
-		dbconfig.setUseExpiration(true);
-		dbconfig.setExpirationSeconds(60);
+//		DBRedisConfig dbconfig = new DBRedisConfig();
+//		dbconfig.setPort("6379");
+//		dbconfig.setUrl("redis://192.168.56.101");
+//		dbconfig.setUseExpiration(true);
+//		dbconfig.setExpirationSeconds(60);
+		DBMemoryConfig dbconfig = new DBMemoryConfig();
 		config.setDbConfig(dbconfig);
 		//config.positionSystem = positionSystem;
 		ObjectMapper mapper = new ObjectMapper();

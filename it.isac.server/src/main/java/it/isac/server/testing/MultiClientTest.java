@@ -1,7 +1,8 @@
 package it.isac.server.testing;
 
+import it.isa.commons.model.sensors.SensorCounterMock;
 import it.isac.commons.interfaces.INodeValue;
-import it.isac.commons.interfaces.ISensor;
+import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.interfaces.resources.INeighboursResource;
 import it.isac.commons.interfaces.resources.INodeResource;
 import it.isac.commons.model.Node;
@@ -33,7 +34,7 @@ public class MultiClientTest {
 		XYPosition end = new XYPosition(0.0f,0.0f);
 		MultiClientTest x = new MultiClientTest();
 		for(int i = 0; i < ps.length; i++){
-			SClient c = (x).new SClient("client" + i, ps[i], end);
+			SClient c = (x).new SClient("client" + i, ps[i], end, i);
 			c.startUpdating();
 		}
 	}
@@ -48,7 +49,7 @@ public class MultiClientTest {
 		double speed = 0.1;
 		ClientResource service;
 		
-		public SClient(String name, XYPosition start, XYPosition end){
+		public SClient(String name, XYPosition start, XYPosition end, long sensorTime){
 			
 			setId(name);
 			this.end = end;
@@ -59,9 +60,14 @@ public class MultiClientTest {
 			
 			NodeState nodeState = new NodeState();
 			nodeState.setPosition(start);
-			nodeState.setSensors(new ArrayList<ISensor>());
+			nodeState.setSensors(new ArrayList<ISensorSnapshot>());
 			nodeState.setValues(new ArrayList<INodeValue>());
 			setState(nodeState);
+			SensorCounterMock scm = new SensorCounterMock();
+			scm.startCounting(sensorTime);
+			ArrayList<ISensorSnapshot> sensors = new ArrayList<ISensorSnapshot>();
+			sensors.add(scm);
+			nodeState.setSensors(sensors);
 			log("created");
 		}
 		

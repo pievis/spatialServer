@@ -2,7 +2,7 @@ package it.isac.commons.model;
 
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.IPosition;
-import it.isac.commons.interfaces.ISensor;
+import it.isac.commons.interfaces.ISensorSnapshot;
 
 import java.util.List;
 /**
@@ -15,7 +15,7 @@ public class NodeState {
 	//String positionType;
 	IPosition position;
 	List<INodeValue> values;
-	List<ISensor> sensors;
+	List<ISensorSnapshot> sensors;
 //	public String getPositionType() {
 //		return positionType;
 //	}
@@ -34,10 +34,10 @@ public class NodeState {
 	public void setValues(List<INodeValue> values) {
 		this.values = values;
 	}
-	public List<ISensor> getSensors() {
+	public List<ISensorSnapshot> getSensors() {
 		return sensors;
 	}
-	public void setSensors(List<ISensor> sensors) {
+	public void setSensors(List<ISensorSnapshot> sensors) {
 		this.sensors = sensors;
 	}
 	
