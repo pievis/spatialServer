@@ -1,6 +1,6 @@
 package it.isac.client.interfaces.managers;
 
-import it.isac.client.interfaces.sensors.ISensor;
+import it.isac.commons.interfaces.ISensor;
 
 public interface ISensorManager {
 	
