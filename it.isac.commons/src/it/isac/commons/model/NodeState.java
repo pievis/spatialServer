@@ -15,7 +15,7 @@ public class NodeState {
 	//String positionType;
 	IPosition position;
 	List<INodeValue> values;
-	List<ISensorSnapshot> sensors;
+	SensorSnapshotList sensors;
 //	public String getPositionType() {
 //		return positionType;
 //	}
@@ -34,10 +34,10 @@ public class NodeState {
 	public void setValues(List<INodeValue> values) {
 		this.values = values;
 	}
-	public List<ISensorSnapshot> getSensors() {
+	public SensorSnapshotList getSensors() {
 		return sensors;
 	}
-	public void setSensors(List<ISensorSnapshot> sensors) {
+	public void setSensors(SensorSnapshotList sensors) {
 		this.sensors = sensors;
 	}
 	
