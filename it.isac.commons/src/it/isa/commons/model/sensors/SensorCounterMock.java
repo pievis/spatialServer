@@ -17,16 +17,18 @@ public class SensorCounterMock implements ISensor {
 	}
 
 	@JsonIgnore
-	public void startCounting(long waitSec) {
-		this.timeInterval = waitSec;
+	public void startCounting(long waitMilliSec) {
+		this.timeInterval = waitMilliSec;
 		Thread t = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				while (counter < MAX_VAL) {
 					counter++;
+//					System.out.println("counter updated " + counter);
+//					System.out.println(getValue().toString());
 					try {
-						Thread.sleep(timeInterval * 1000);
+						Thread.sleep(timeInterval);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -51,5 +53,9 @@ public class SensorCounterMock implements ISensor {
 	@Override
 	public String getType() {
 		return SensorType.MOCK;
+	}
+	
+	public static void main(String args[]){
+		new SensorCounterMock("test").startCounting(500);
 	}
 }

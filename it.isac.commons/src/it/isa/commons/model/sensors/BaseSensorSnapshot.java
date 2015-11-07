@@ -9,6 +9,7 @@ public class BaseSensorSnapshot implements ISensorSnapshot{
 	String sensorId;
 	
 	public BaseSensorSnapshot(){}
+	
 	public BaseSensorSnapshot(String sensorId, String type, String value){
 		this.value = value;
 		this.sensorId = sensorId;
@@ -34,4 +35,8 @@ public class BaseSensorSnapshot implements ISensorSnapshot{
 		this.sensorId = sensorId;
 	}
 		
+	@Override
+	public String toString(){
+		return "{"+value +"}";
+	}
 }

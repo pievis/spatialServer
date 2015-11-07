@@ -5,6 +5,8 @@ import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensorSnapshot;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * This class shows the model of a NodeState
  * @author Pievis
@@ -15,7 +17,7 @@ public class NodeState {
 	//String positionType;
 	IPosition position;
 	List<INodeValue> values;
-	SensorSnapshotList sensors;
+	List<ISensorSnapshot> sensors;
 //	public String getPositionType() {
 //		return positionType;
 //	}
@@ -34,13 +36,14 @@ public class NodeState {
 	public void setValues(List<INodeValue> values) {
 		this.values = values;
 	}
-	public SensorSnapshotList getSensors() {
+	public List<ISensorSnapshot> getSensors() {
 		return sensors;
 	}
-	public void setSensors(SensorSnapshotList sensors) {
+	public void setSensors(List<ISensorSnapshot> sensors) {
 		this.sensors = sensors;
 	}
 	
+	@JsonIgnore
 	public String toString(){
 		String value = "";
 		value += "[pos: " + position.toString() +
