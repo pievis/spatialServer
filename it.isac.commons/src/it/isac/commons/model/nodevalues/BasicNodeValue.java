@@ -7,8 +7,14 @@ public class BasicNodeValue implements INodeValue {
 	String value;
 	protected String key;
 	
+	public BasicNodeValue(){}
+	
 	public BasicNodeValue(String key) {
 		this.key = key;
+	}
+	public BasicNodeValue(String key, String value) {
+		this.key = key;
+		this.value = value;
 	}
 	
 	@Override

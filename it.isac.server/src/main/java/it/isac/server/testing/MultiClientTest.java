@@ -1,6 +1,7 @@
 package it.isac.server.testing;
 
-import it.isa.commons.model.sensors.SensorCounterMock;
+import it.isac.commons.model.nodevalues.BasicNodeValue;
+import it.isac.commons.model.sensors.SensorCounterMock;
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.interfaces.resources.INeighboursResource;
@@ -11,10 +12,14 @@ import it.isac.commons.model.NodeState;
 import it.isac.commons.model.XYPosition;
 import it.isac.commons.requestresponse.SimpleResponse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.restlet.resource.ClientResource;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Test with N clients
@@ -96,6 +101,12 @@ public class MultiClientTest {
 			uThread.start();
 			log("update started");
 		}
+		
+		public void updateValue(){
+			ArrayList<INodeValue> values = new ArrayList<INodeValue>();
+			values.add(new BasicNodeValue("v",getId())); //use own node id as value
+			getState().setValues(values);
+		}
 
 		void log(String str) {
 			LOGGER.info(getId() + "] " + str);
@@ -114,7 +125,22 @@ public class MultiClientTest {
 					// Move & sensor readings update
 					move();
 					fetchSensorValues();
-					// Send position to server
+					//Update values
+					updateValue();
+					
+					//Test
+					ObjectMapper mapper = new ObjectMapper();
+					try {
+						String json = mapper.writeValueAsString(node);
+						System.out.println(json);
+						Node n = mapper.readValue(json, Node.class);
+					} catch (JsonProcessingException e1) {
+						e1.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					// Send state and position to server
 					INodeResource nodeRes = service.getChild("/" + NET_NAME
 							+ "/nodes/" + getId() + "/", INodeResource.class);
 					// log(node.getId() + " " + node.getState().toString());
@@ -126,6 +152,7 @@ public class MultiClientTest {
 							+ NET_NAME + "/nodes/" + getId() + "/nbr/",
 							INeighboursResource.class);
 					NodeList nodes = nbrRes.represent();
+					
 					for (Node n : nodes) {
 						log("NBR: \t" + n.getId());
 						log("\t\t" + n.getState().toString());

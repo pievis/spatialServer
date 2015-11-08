@@ -4,7 +4,9 @@ import it.isac.commons.model.LatLonPosition;
 import it.isac.commons.model.PositionType;
 import it.isac.commons.model.XYPosition;
 import it.isac.commons.model.sensors.BaseSensorSnapshot;
+import it.isac.commons.model.sensors.SensorType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -20,6 +22,8 @@ include = JsonTypeInfo.As.PROPERTY,
 defaultImpl = BaseSensorSnapshot.class, //Default conversion
 property = "type" )
 //add subtypes if neccessary
+@JsonSubTypes({ @JsonSubTypes.Type(value = BaseSensorSnapshot.class,
+	name = SensorType.MOCK)})
 public interface ISensorSnapshot {
 	
 	public String getSensorId();
@@ -36,6 +40,7 @@ public interface ISensorSnapshot {
 	 * 
 	 * @return a string indentifying the type of this sensor
 	 */
+	@JsonIgnore
 	public String getType();
 	public void setType(String type);
 }
