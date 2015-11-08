@@ -1,9 +1,9 @@
 package it.isac.commons.interfaces;
 
-import it.isa.commons.model.sensors.BaseSensorSnapshot;
 import it.isac.commons.model.LatLonPosition;
 import it.isac.commons.model.PositionType;
 import it.isac.commons.model.XYPosition;
+import it.isac.commons.model.sensors.BaseSensorSnapshot;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

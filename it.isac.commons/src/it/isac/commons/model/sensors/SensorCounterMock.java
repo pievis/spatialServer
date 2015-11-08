@@ -1,4 +1,4 @@
-package it.isa.commons.model.sensors;
+package it.isac.commons.model.sensors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
