@@ -47,5 +47,7 @@ public abstract class AbstractManager implements IManager {
 	public void dispose() {
 		schedulerExecutorService.shutdown();
 	}
+	
+	public abstract void updateValue(String id, Object value);
 
 }

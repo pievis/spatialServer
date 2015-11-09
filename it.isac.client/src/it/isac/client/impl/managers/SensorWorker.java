@@ -6,7 +6,8 @@ import it.isac.commons.interfaces.ISensorSnapshot;
 public class SensorWorker extends DeviceJobWorker {
 	ISensor sensor;
 	
-	public SensorWorker(ISensor sensor) {
+	public SensorWorker(ISensor sensor, String id, SensorManager mng) {
+		super(id, mng);
 		this.sensor = sensor;
 	}
 
@@ -14,8 +15,9 @@ public class SensorWorker extends DeviceJobWorker {
 	public void doJob() {
 		// get sensor value
 		ISensorSnapshot sensorValue = sensor.getValue();
+		this.val = sensorValue;
 		//TODO: Do something with those values!
-		System.out.println(sensorValue.getSensorId() + "_" + sensorValue.getValue());
+		//System.out.println(sensorValue.getSensorId() + "_" + sensorValue.getValue());
 		
 	}
 

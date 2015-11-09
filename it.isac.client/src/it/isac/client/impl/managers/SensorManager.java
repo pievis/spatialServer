@@ -1,26 +1,39 @@
 package it.isac.client.impl.managers;
 
-import it.isa.commons.model.sensors.SensorCounterMock;
+import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.ISensorManager;
 import it.isac.commons.interfaces.ISensor;
+import it.isac.commons.interfaces.ISensorSnapshot;
+import it.isac.commons.model.sensors.SensorCounterMock;
 
 public class SensorManager extends AbstractManager implements ISensorManager {
 	//private List<ISensor> sensors;
+	int nextWorkerId = 0;
 	
-	protected SensorManager(Long initFreq) {
+	public SensorManager(Long initFreq) {
 		super(initFreq);
 	}
 
 	@Override
 	public void addSensor(ISensor sensor) {
 		// add a worker
-		this.workers.add(new SensorWorker(sensor));
+		this.workers.add(new SensorWorker(sensor, "sensor"+nextWorkerId, this));
+		nextWorkerId++;
 	}
 
 	@Override
 	public void addSimulatedSensor(ISensor sensor) {
 		// add a worker (with simulated sensor)
-		this.workers.add(new SensorWorker(sensor));
+		this.workers.add(new SensorWorker(sensor, "sensor"+nextWorkerId, this));
+		nextWorkerId++;
+	}
+
+	@Override
+	public void updateValue(String id, Object value) {
+		// Handle update of the domain
+		ISensorSnapshot sensorVal = (ISensorSnapshot)value;
+		Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
+		// note that sensorId is used in place of workerId
 	}
 	
 	public static void main(String[] args) {
