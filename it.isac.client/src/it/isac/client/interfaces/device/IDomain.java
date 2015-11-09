@@ -15,7 +15,7 @@ public interface IDomain {
 	
 	// Sensor Modifier
 	public ISensorSnapshot getSensorValue(String key);
-	public HashMap<String, ISensorSnapshot> getAllSensorVelue();
+	public HashMap<String, ISensorSnapshot> getAllSensorValue();
 	public void updateSensorValue(String key, ISensorSnapshot value);
 	
 	// Neighbor Modifier

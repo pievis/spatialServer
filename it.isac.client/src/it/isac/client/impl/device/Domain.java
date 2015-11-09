@@ -54,7 +54,7 @@ public class Domain implements IDomain {
 		return sensorsValues.get(key);
 	}
 	@Override
-	public HashMap<String, ISensorSnapshot> getAllSensorVelue() {
+	public HashMap<String, ISensorSnapshot> getAllSensorValue() {
 		return new HashMap<>(sensorsValues); // TODO test
 	}
 	@Override

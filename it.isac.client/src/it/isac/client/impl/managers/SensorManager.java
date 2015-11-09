@@ -47,5 +47,5 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 		sensMng.addSensor(mock);
 		sensMng.addSensor(mock2);
 		sensMng.start();
-	}
+	}	
 }
