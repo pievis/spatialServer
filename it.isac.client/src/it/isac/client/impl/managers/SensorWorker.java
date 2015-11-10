@@ -16,9 +16,6 @@ public class SensorWorker extends DeviceJobWorker {
 		// get sensor value
 		ISensorSnapshot sensorValue = sensor.getValue();
 		this.val = sensorValue;
-		//TODO: Do something with those values!
-		//System.out.println(sensorValue.getSensorId() + "_" + sensorValue.getValue());
-		
 	}
 
 }

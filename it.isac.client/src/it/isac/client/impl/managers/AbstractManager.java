@@ -49,5 +49,4 @@ public abstract class AbstractManager implements IManager {
 	}
 	
 	public abstract void updateValue(String id, Object value);
-
 }
