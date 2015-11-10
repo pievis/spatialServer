@@ -1,8 +1,5 @@
 package it.isac.server;
 
-import it.isac.db.DataBase;
-import it.isac.db.MemoryDB;
-import it.isac.db.RedisDB;
 import it.isac.server.resources.NeighboursServerResource;
 import it.isac.server.resources.NodeServerResource;
 import it.isac.server.resources.NodesServerResource;
@@ -11,7 +8,6 @@ import it.isac.server.utils.ServerConfig;
 import it.isac.server.utils.UrlAttributes;
 
 import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,18 +42,6 @@ public class ServerApplication extends Application {
 	public ServerApplication(){
 		setName("Spatial Computing Mediator");
 		setAuthor("Pierluigi Montagna");
-		configure();
-	}
-	
-	void configure(){
-		//Load Server configuration from file
-			//Which now include db server configuration
-		ServerConfig.loadFromConfigFile();
-		try {
-			configureLogger();
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Error during logger configuration.", e);
-		}
 	}
 	
 	void configureLogger() throws SecurityException, IOException{

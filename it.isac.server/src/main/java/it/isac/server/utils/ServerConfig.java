@@ -1,13 +1,11 @@
 package it.isac.server.utils;
 
-import it.isac.commons.model.PositionType;
 import it.isac.db.DataBase;
 import it.isac.db.MemoryDB;
 import it.isac.db.RedisDB;
 import it.isac.db.search.SearchCriteria;
 import it.isac.server.utils.config.ConfigPOJO;
 import it.isac.server.utils.config.DBConfig;
-import it.isac.server.utils.config.DBMemoryConfig;
 import it.isac.server.utils.config.DBRedisConfig;
 
 import java.io.File;
@@ -15,7 +13,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,7 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ServerConfig {
 
-	final static String CONFIG_FILE_NAME = "config.ini";
+	public static final String BASE_CONFIG_FILE_NAME = "config.ini";
+	public static String CONFIG_FILE_NAME = "config.ini";
 	final static Logger LOGGER = Logger.getLogger(ServerConfig.class.getName());
 	
 	static String name = "Spatial Computing server";
@@ -50,7 +48,7 @@ public class ServerConfig {
 	//
 	public static void setSearchCriteria(SearchCriteria sc){
 		searchCriteria = sc;
-	} 
+	}
 	
 	//
 	public static SearchCriteria getSearchCriteria(){
@@ -163,12 +161,12 @@ public class ServerConfig {
 		config.setVersionName(versionName);
 		config.setLoggerFilesDir(loggerFilesFolder);
 		//Redis Config def
-//		DBRedisConfig dbconfig = new DBRedisConfig();
-//		dbconfig.setPort("6379");
-//		dbconfig.setUrl("redis://192.168.56.101");
-//		dbconfig.setUseExpiration(true);
-//		dbconfig.setExpirationSeconds(60);
-		DBMemoryConfig dbconfig = new DBMemoryConfig();
+		DBRedisConfig dbconfig = new DBRedisConfig();
+		dbconfig.setPort("6379");
+		dbconfig.setUrl("redis://192.168.56.101");
+		dbconfig.setUseExpiration(true);
+		dbconfig.setExpirationSeconds(60);
+//		DBMemoryConfig dbconfig = new DBMemoryConfig();
 		config.setDbConfig(dbconfig);
 		//config.positionSystem = positionSystem;
 		ObjectMapper mapper = new ObjectMapper();
@@ -198,7 +196,7 @@ public class ServerConfig {
 	
 	//For generating and loading test
 	public static void main(String[] args){
-		//genConfigFile();
+		genConfigFile();
 		loadFromConfigFile();
 		//System.out.println(name + "\n" + description);
 	}

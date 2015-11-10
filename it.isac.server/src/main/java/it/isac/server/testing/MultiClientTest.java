@@ -32,15 +32,19 @@ public class MultiClientTest {
 	final static String NET_NAME = "net0";
 
 	public static void main(String args[]) {
+		int updateWait = 500;
+		if (args.length > 0) {
+			updateWait = Integer.parseInt(args[1]);
+		}
 		XYPosition[] ps = { new XYPosition(5.0f, 15.0f),
-		// new XYPosition(2.0f, 15.0f),
-		// new XYPosition(1005.0f, 15.0f),
-		 new XYPosition(2005.0f, 1005.0f)
-		};
+				// new XYPosition(2.0f, 15.0f),
+				// new XYPosition(1005.0f, 15.0f),
+				new XYPosition(2005.0f, 1005.0f) };
 		XYPosition end = new XYPosition(0.0f, 0.0f);
 		MultiClientTest x = new MultiClientTest();
 		for (int i = 0; i < ps.length; i++) {
-			SClient c = (x).new SClient("client" + i, ps[i], end, (1+i)*200);
+			SClient c = (x).new SClient("client" + i, ps[i], end, updateWait,
+					(1 + i) * 200);
 			c.startUpdating();
 		}
 	}
@@ -57,10 +61,11 @@ public class MultiClientTest {
 		SensorCounterMock scm;
 
 		public SClient(String name, XYPosition start, XYPosition end,
-				long sensorTime) {
+				int updateWait, long sensorTime) {
 
 			setId(name);
 			this.end = end;
+			this.updateWait = updateWait;
 			diff = new XYPosition((end.getX() - start.getX()) * speed,
 					(end.getY() - start.getY()) * speed);
 			service = new ClientResource("http://localhost:8111");
@@ -88,8 +93,8 @@ public class MultiClientTest {
 			// Check if at destination
 			ending = XYPosition.distance(current, end) < 1.5 ? true : false;
 		}
-		
-		void fetchSensorValues(){
+
+		void fetchSensorValues() {
 			ArrayList<ISensorSnapshot> sensors = new ArrayList<ISensorSnapshot>();
 			sensors.add(scm.getValue());
 			NodeState ns = getState();
@@ -101,10 +106,11 @@ public class MultiClientTest {
 			uThread.start();
 			log("update started");
 		}
-		
-		public void updateValue(){
+
+		public void updateValue() {
 			ArrayList<INodeValue> values = new ArrayList<INodeValue>();
-			values.add(new BasicNodeValue("v",getId())); //use own node id as value
+			values.add(new BasicNodeValue("v", getId())); // use own node id as
+															// value
 			getState().setValues(values);
 		}
 
@@ -125,10 +131,10 @@ public class MultiClientTest {
 					// Move & sensor readings update
 					move();
 					fetchSensorValues();
-					//Update values
+					// Update values
 					updateValue();
-					
-					//Test
+
+					// Test
 					ObjectMapper mapper = new ObjectMapper();
 					try {
 						String json = mapper.writeValueAsString(node);
@@ -139,12 +145,12 @@ public class MultiClientTest {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					
+
 					// Send state and position to server
 					INodeResource nodeRes = service.getChild("/" + NET_NAME
 							+ "/nodes/" + getId() + "/", INodeResource.class);
 					// log(node.getId() + " " + node.getState().toString());
-					
+
 					SimpleResponse sr = nodeRes.update(node);
 					log(sr.getMessage());
 					// Get neighbourhood
@@ -152,7 +158,7 @@ public class MultiClientTest {
 							+ NET_NAME + "/nodes/" + getId() + "/nbr/",
 							INeighboursResource.class);
 					NodeList nodes = nbrRes.represent();
-					
+
 					for (Node n : nodes) {
 						log("NBR: \t" + n.getId());
 						log("\t\t" + n.getState().toString());

@@ -5,10 +5,12 @@ import it.isac.commons.model.LatLonPosition;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeState;
 import it.isac.commons.model.PositionType;
+import it.isac.commons.model.Unit;
 import it.isac.db.search.NearestNSearch;
 import it.isac.db.search.RangeSearch;
 import it.isac.db.search.SearchCriteria;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,9 +18,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaworks.redis.GeoArgs;
+import com.lambdaworks.redis.GeoWithin;
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
@@ -190,13 +195,89 @@ public class RedisDB implements ISpatialDataBase {
 			return rangeSearch(net, pos, (RangeSearch) searchCriteria);
 		}
 		if (searchCriteria instanceof NearestNSearch) {
-			// TODO implement other type of search
-			throw new UnsupportedOperationException();
+			return nearestSearch(net, pos, (NearestNSearch) searchCriteria);
 		}
-
+		// TODO implement other type of search
 		return null;
 	}
 
+	/**
+	 * Gets the nearest N node specified by the SearchCriteria
+	 * 
+	 * @param net
+	 * @param position
+	 * @param ns
+	 * @return
+	 */
+	List<Node> nearestSearch(String net, LatLonPosition position,
+			NearestNSearch ns) {
+		RedisCommands<String, String> console = getConsole();
+		LOGGER.fine("Starting geoquery\n\tpoint: " + position.toString()
+				+ "\n\tMax N: " + ns.getNumber() + "");
+		GeoArgs args = new GeoArgs().withDistance().asc(); // sorts the result
+															// from the nearest
+															// to the furthers
+		double distance = ns.getMaxDistance();
+		if (ns.getMaxDistanceUnit().equals(Unit.M))
+			distance /= 1000;
+		List<GeoWithin<String>> points = console.georadius(net,
+				position.getLon(), position.getLat(), distance,
+				GeoArgs.Unit.km, args);
+		// take N number at least
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		ArrayList<String> removeList = new ArrayList<String>();
+		int added = 0;
+		for (int i = 0; (added < ns.getNumber()) && (i < points.size()); i++) {
+			LOGGER.finer("Value processed: " + i + "\nAdded: " + added);
+			if (points.get(i) != null) {
+				String id = points.get(i).member;
+				// check if the node expired meanwhile
+				String ukey = nodeUniqueId(net, id);
+				String json = console.get(ukey);
+				if (json == null) {
+					removeList.add(id);
+				} else {
+					Node n;
+					try {
+						n = mapper.readValue(json, Node.class);
+						nodes.add(n);
+						added++;
+					} catch (Exception e) {
+						LOGGER.warning("Problem parsing node id: " + id);
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		// Remove expired if any
+		removeFromGeoList(net, removeList);
+		return nodes;
+	}
+	
+	void removeFromGeoList(String net, ArrayList<String> removeList){
+		LOGGER.finer("Start removing.. ");
+		// Remove expired if any
+		if(removeList.size() == 0)
+			return;
+		try {
+			String[] stockArr = new String[removeList.size()];
+			stockArr = removeList.toArray(stockArr);
+			long removed = console.zrem(net, stockArr);
+			LOGGER.finer("Nodes removed from geolist: " + removed);
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Error while removing from geolist", e);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Range search generally supported by redis georadius
+	 * 
+	 * @param net
+	 * @param position
+	 * @param rs
+	 * @return
+	 */
 	List<Node> rangeSearch(String net, LatLonPosition position, RangeSearch rs) {
 
 		RedisCommands<String, String> console = getConsole();
@@ -235,15 +316,13 @@ public class RedisDB implements ISpatialDataBase {
 	 */
 	Collection<Node> getNodesFromIds(List<String> ids, String net) {
 		Collection<Node> nodes = new ArrayList<Node>();
+		ArrayList<String> removeList = new ArrayList<String>();
 		for (String id : ids) {
 			String ukey = nodeUniqueId(net, id);
 			String json = console.get(ukey);
 			if (json == null) {
 				// node might be expired
-				long removed = console.zrem(net, new String[] { id });
-				if (removed <= 0)
-					LOGGER.warning("No node removed for id " + id + " and net "
-							+ net);
+				removeList.add(id);
 			} else {
 				try {
 					Node n = mapper.readValue(json, Node.class);
@@ -254,6 +333,8 @@ public class RedisDB implements ISpatialDataBase {
 				}
 			}
 		}
+		// Remove every node after to reduce redis call
+		removeFromGeoList(net, removeList);
 		return nodes;
 	}
 
