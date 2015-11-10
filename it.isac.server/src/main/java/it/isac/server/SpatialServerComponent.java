@@ -1,6 +1,7 @@
 package it.isac.server;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -21,12 +22,19 @@ public class SpatialServerComponent extends Component {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception{
+		//if any args, then load then use that configuration file,
+		if(args != null && args.length > 0){
+			ServerConfig.CONFIG_FILE_NAME = args[0];
+			LOGGER.config("Using config file: " + ServerConfig.CONFIG_FILE_NAME);
+		}
+		//otherwise use default config.ini in project folder
 		setupLoggerProperties();
 		new SpatialServerComponent().start();
 		LOGGER.info("Spatial computing server started");
 	}
 	
 	public SpatialServerComponent(){
+		configure();
 		setup();
 	}
 	
@@ -40,6 +48,12 @@ public class SpatialServerComponent extends Component {
 		getServers().add(Protocol.HTTP, port);
 		//add application to the server
 		getDefaultHost().attachDefault(new ServerApplication());
+	}
+	
+	void configure(){
+		//Load Server configuration from file
+			//Which now include db server configuration
+		ServerConfig.loadFromConfigFile();
 	}
 	
 	void setupInfo(){

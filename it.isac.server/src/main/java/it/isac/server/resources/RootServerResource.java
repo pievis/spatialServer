@@ -1,5 +1,7 @@
 package it.isac.server.resources;
 
+import it.isac.server.utils.ServerConfig;
+
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
@@ -11,7 +13,8 @@ public class RootServerResource extends ServerResource {
 
 	@Get("txt")
 	public String represent(){
-		String message = "Spatial Computing ReSTlet Server\nVersion: 1.0";
+		String message = "Spatial Computing ReSTlet Server\nVersion: " + ServerConfig.getVersionName();
+		message += "\n" + ServerConfig.getDescription();
 		return message;
 	} 
 }

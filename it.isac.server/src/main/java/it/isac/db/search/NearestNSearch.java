@@ -1,7 +1,43 @@
 package it.isac.db.search;
 
+import it.isac.commons.model.Unit;
+
 public class NearestNSearch extends SearchCriteria {
 	int number;
+	double maxDistance;
+	Unit maxDistanceUnit;
+	
+	/**
+	 *	 
+	 * @return the max distance for the query
+	 */
+	public double getMaxDistance() {
+		return maxDistance;
+	}
+
+	/**
+	 * 
+	 * @param maxDistance
+	 */
+	public void setMaxDistance(double maxDistance) {
+		this.maxDistance = maxDistance;
+	}
+
+	/**
+	 * 
+	 * @return Unit used for the maxDistance
+	 */
+	public Unit getMaxDistanceUnit() {
+		return maxDistanceUnit;
+	}
+
+	/**
+	 * 
+	 * @param maxDistanceUnit
+	 */
+	public void setMaxDistanceUnit(Unit maxDistanceUnit) {
+		this.maxDistanceUnit = maxDistanceUnit;
+	}
 
 	public NearestNSearch(){}
 	
