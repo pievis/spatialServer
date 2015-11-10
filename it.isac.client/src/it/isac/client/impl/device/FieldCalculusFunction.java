@@ -1,19 +1,19 @@
 package it.isac.client.impl.device;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.naming.NotContextException;
 
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.ISensorSnapshot;
+import it.isac.commons.model.NodeState;
 
 public abstract class FieldCalculusFunction {
 	protected ExecutionContext<?> execContext;
-	protected String fieldId;
+	private INodeValue startVal;
 
-	public FieldCalculusFunction(String name) {
-		this.fieldId = name;
+	public FieldCalculusFunction(INodeValue startingValue) {
+		this.startVal = startingValue;
 	}
 
 	public void setExecutionContext(ExecutionContext<?> execContext) {
@@ -26,12 +26,12 @@ public abstract class FieldCalculusFunction {
 		return this.execContext;
 	}
 	
-	public String getFieldId() {
-		return fieldId;
+	public INodeValue getStarting() {
+		return startVal;
 	}
 
-	// Neighbor is a map of NodeId - List<State> because every nove can have
+	// Neighbor is a map of NodeId - NodeState because every node can have
 	// multiple field
-	public abstract INodeValue compute(INodeValue localCurrentStates, Map<String, List<INodeValue>> nbrState,
+	public abstract INodeValue compute(INodeValue localCurrentStates, Map<String, NodeState> nbrState,
 			Map<String, ISensorSnapshot> localSensors);
 }

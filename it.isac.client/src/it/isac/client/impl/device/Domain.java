@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import it.isac.client.interfaces.device.IDomain;
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.ISensorSnapshot;
-import it.isac.commons.model.Node;
+import it.isac.commons.model.NodeState;
 
 // This class represent the current state of the domain. 
 // It is also a (concurrent) unified access point
@@ -14,7 +14,7 @@ public class Domain implements IDomain {
 	private static Domain dominio;
 	
 	private ConcurrentHashMap<String, INodeValue> fieldsValues;
-	private ConcurrentHashMap<String, Node> nbrValues;
+	private ConcurrentHashMap<String, NodeState> nbrValues;
 	private ConcurrentHashMap<String, ISensorSnapshot> sensorsValues;
 	
 	// Singleton
@@ -63,21 +63,19 @@ public class Domain implements IDomain {
 			sensorsValues.replace(key, value); //update
 		else
 			sensorsValues.put(key, value); //create
-		// Just for test
-		System.out.println(key + ": " + value.getSensorId() + "_" + value.getValue());
 	}
 
 	// Neighbor Modifier
 	@Override
-	public Node getNbr(String key) {
+	public NodeState getNbr(String key) {
 		return nbrValues.get(key);
 	}
 	@Override
-	public HashMap<String, Node> getAllNbr() {
+	public HashMap<String, NodeState> getAllNbr() {
 		return new HashMap<>(nbrValues); // TODO test
 	}
 	@Override
-	public void updateNbr(String key, Node value) {
+	public void updateNbr(String key, NodeState value) {
 		if(nbrValues.containsKey(key))
 			nbrValues.replace(key, value); //update
 		else
