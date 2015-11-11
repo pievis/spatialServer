@@ -43,6 +43,12 @@ public class NodeServerResource extends ServerResource implements INodeResource 
 	public SimpleResponse update(Node node) {
 		SimpleResponse sr;
 		try{
+			//Position can't be null
+			if(node.getState().getPosition() == null)
+			{
+				return new SimpleResponse(false, "Position can't be null");
+			}
+			
 			sb.updateNodeState(netId, node.getId(), node.getState());
 			sr = new SimpleResponse(true, "Node updated");
 		}catch(Exception e){

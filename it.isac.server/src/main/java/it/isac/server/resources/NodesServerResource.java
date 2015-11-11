@@ -36,6 +36,13 @@ public class NodesServerResource extends ServerResource implements INodesResourc
 	}
 
 	public SimpleResponse addNode(NodeState nodeState) {
+		//Check if the node has a position
+		//If no position is provided, that's an error
+		if(nodeState.getPosition() == null){
+			SimpleResponse sr = new SimpleResponse(false, "Position is mandatory, can't be null.");
+			return sr;
+		}
+		
 		//Generate an unique ID
 		String id = UniqueIDGetter.gen();
 		
