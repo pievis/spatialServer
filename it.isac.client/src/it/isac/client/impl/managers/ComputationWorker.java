@@ -1,12 +1,12 @@
 package it.isac.client.impl.managers;
 
-import java.util.List;
 import java.util.Map;
 
 import it.isac.client.impl.device.FieldCalculusFunction;
 import it.isac.client.interfaces.managers.IComputationManager;
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.ISensorSnapshot;
+import it.isac.commons.model.NodeState;
 
 public class ComputationWorker extends DeviceJobWorker {
 	FieldCalculusFunction func;
@@ -21,7 +21,7 @@ public class ComputationWorker extends DeviceJobWorker {
 		// Current state: many field, each with its id
 		INodeValue currentState = ((IComputationManager)mng).getCurrentState(this.id);
 		// Neighbor State: pair NodeId, list of field
-		Map<String, List<INodeValue>> nbrState = ((IComputationManager)mng).getNeighborhood();
+		Map<String, NodeState> nbrState = ((IComputationManager)mng).getNeighborhood();
 		// Sensors: SensorID, value
 		Map<String, ISensorSnapshot> localSensors =((IComputationManager)mng).getSensorsValue();
 		// compute

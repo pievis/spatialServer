@@ -3,9 +3,9 @@ package it.isac.client.interfaces.device;
 import java.util.HashMap;
 
 import it.isac.commons.interfaces.INodeValue;
-import it.isac.commons.interfaces.ISensor;
+import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensorSnapshot;
-import it.isac.commons.model.Node;
+import it.isac.commons.model.NodeState;
 
 public interface IDomain {
 	// Field modifier
@@ -19,7 +19,12 @@ public interface IDomain {
 	public void updateSensorValue(String key, ISensorSnapshot value);
 	
 	// Neighbor Modifier
-	public Node getNbr(String key);
-	public HashMap<String, Node> getAllNbr();
-	public void updateNbr(String key, Node value);
+	public NodeState getNbr(String key);
+	public HashMap<String, NodeState> getAllNbr();
+	public void updateNbr(String key, NodeState value);
+	public void updateAllNbr(HashMap<String, NodeState> newNbr);
+	
+	// Position Modifier
+	public IPosition getPosition();
+	public void setPosition(IPosition newPosition);
 }

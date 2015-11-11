@@ -2,19 +2,21 @@ package it.isac.utils.impl;
 
 import org.restlet.resource.ClientResource;
 import it.isac.commons.requestresponse.IdClass;
+import it.isac.commons.interfaces.resources.INeighboursResource;
+import it.isac.commons.interfaces.resources.INodeResource;
 import it.isac.commons.interfaces.resources.INodesResource;
+import it.isac.commons.model.Node;
+import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
 import it.isac.commons.requestresponse.SimpleResponse;
 import it.isac.utils.interfaces.ICMImplDesktop;
 
 public class CMImplDesktop extends ComManagerImpl implements ICMImplDesktop {
-	// TODO: Actually this class act like a mock. We will consider a future
-	// implementation
 
 	@Override
-	public void joinNetwork(NodeState state) {
-		ClientResource service = new ClientResource("http://localhost:8111");
-		INodesResource nodesRe = service.getChild("/net0/nodes/", INodesResource.class);
+	public String joinNetwork(NodeState state) {
+		ClientResource service = new ClientResource(ComManagerFactory.BASEURL);
+		INodesResource nodesRe = service.getChild(ComManagerFactory.NETID+"/nodes/", INodesResource.class);
 		SimpleResponse sr = nodesRe.addNode(state); // POST
 		
 		String idNode = "";
@@ -22,18 +24,28 @@ public class CMImplDesktop extends ComManagerImpl implements ICMImplDesktop {
 		if(sr.isSuccess()) {
 			idNode = ((IdClass)sr.getData()).getId();
 		}
-		
-		System.out.println("Mock join Network - idNode: " + idNode);
+		return idNode;
 	}
 
 	@Override
-	public void fetchNeighbour(String nodeId) {
-		System.out.println("Mock fetch Nbr");
+	public NodeList fetchNeighbour(String nodeId) {
+		ClientResource service = new ClientResource(ComManagerFactory.BASEURL);
+		INeighboursResource nbrRes = service.getChild(ComManagerFactory.NETID+"/nodes/"+nodeId+"/nbr/",INeighboursResource.class);
+		NodeList res = nbrRes.represent(); // GET
+		return res;
 	}
 
 	@Override
 	public void sendState(String nodeId, NodeState state) {
-		System.out.println("Mock send state");
+		ClientResource service = new ClientResource(ComManagerFactory.BASEURL);
+		INodeResource nodesRes = service.getChild(ComManagerFactory.NETID+"/nodes/"+nodeId, INodeResource.class);
+		SimpleResponse sr = nodesRes.update(new Node(nodeId, state)); // POST
+		if(sr != null) {
+			if(!sr.isSuccess())
+				System.out.println("Error while sending new state: "+sr.getMessage());
+		}
+		else
+			System.out.println("Something wrong with the server: external server error");
 	}
 
 }

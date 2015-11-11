@@ -5,11 +5,12 @@ import it.isac.client.interfaces.managers.ISensorManager;
 import it.isac.commons.interfaces.ISensor;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.sensors.SensorCounterMock;
+import it.isac.commons.model.sensors.SensorType;
 
 public class SensorManager extends AbstractManager implements ISensorManager {
-	//private List<ISensor> sensors;
+	// private List<ISensor> sensors;
 	int nextWorkerId = 0;
-	
+
 	public SensorManager(Long initFreq) {
 		super(initFreq);
 	}
@@ -17,25 +18,29 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 	@Override
 	public void addSensor(ISensor sensor) {
 		// add a worker
-		this.workers.add(new SensorWorker(sensor, "sensor"+nextWorkerId, this));
+		this.workers.add(new SensorWorker(sensor, "sensor" + nextWorkerId, this));
 		nextWorkerId++;
 	}
 
 	@Override
 	public void addSimulatedSensor(ISensor sensor) {
 		// add a worker (with simulated sensor)
-		this.workers.add(new SensorWorker(sensor, "sensor"+nextWorkerId, this));
+		this.workers.add(new SensorWorker(sensor, "sensor" + nextWorkerId, this));
 		nextWorkerId++;
 	}
 
 	@Override
 	public void updateValue(String id, Object value) {
 		// Handle update of the domain
-		ISensorSnapshot sensorVal = (ISensorSnapshot)value;
-		Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
+		ISensorSnapshot sensorVal = (ISensorSnapshot) value;
+		if (sensorVal.getType().contains(SensorType.GPS)){
+			//Domain.getIstance().setPosition();
+		}
+		else
+			Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
 		// note that sensorId is used in place of workerId
 	}
-	
+
 	public static void main(String[] args) {
 		// just for test
 		Long frequency = new Long(1000);
@@ -47,5 +52,5 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 		sensMng.addSensor(mock);
 		sensMng.addSensor(mock2);
 		sensMng.start();
-	}	
+	}
 }
