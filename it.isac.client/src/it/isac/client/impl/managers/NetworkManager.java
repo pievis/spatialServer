@@ -1,9 +1,12 @@
 package it.isac.client.impl.managers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.INetworkManager;
+import it.isac.commons.interfaces.INodeValue;
+import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
@@ -14,6 +17,9 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 	ComunicationManager manager; // proxy-like
 	private final String joinerId = "Jonny";
 	private final String nbrFetcherId = "nbrFetcher";
+	private final String senderId = "stateSender";
+
+	private String deviceId;
 
 	public NetworkManager(Long initFreq) {
 		super(initFreq);
@@ -22,33 +28,54 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 	}
 
 	private void init() {
-		// add three workers
+		// add network joiner worker
 		workers.add(new NetworkJoinWorker(joinerId, this));
 	}
 
 	@Override
 	public void updateValue(String id, Object value) {
-		if (id == joinerId && (boolean)value) {
-			workers.remove(0); // remove the joiner worker
-			// TODO tell the deviceID in the network to someone
+		if (value != null) {
+			if (id == joinerId && !((String) value).isEmpty()) {
+				workers.remove(0); // remove the joiner worker
+				// save the deviceID in the network
+				deviceId = (String) value;
+				// start new workers
+				workers.add(new NetworkNbrFetcherWorker(nbrFetcherId, this, deviceId));
+				workers.add(new NetworkSenderWorker(senderId, this, deviceId));
+			} else if (id == nbrFetcherId && !((NodeList) value).isEmpty()) {
+				// Update the domain
+				HashMap<String, NodeState> nbrTable = new HashMap<>();
+				NodeList nbr = (NodeList) value;
+				for (Node n : nbr) {
+					// Build the neighbourhood table
+					nbrTable.put(n.getId(), n.getState());
+				}
+				Domain.getIstance().updateAllNbr(nbrTable);
+			}
+			// else is the state sender and I don't have to do anything with the
+			// value
 		}
-		else if(id == nbrFetcherId) {
-			// TODO Update the domain
-			// Domain.getIstance().updateNbr(key, value);
-		}
-		// else is the state sender and I don't have to do anything with the value
 	}
 
 	@Override
 	public NodeState getCurrentState() {
-
-		return null;
+		// create a suitable representation for the worker
+		Domain dIstance = Domain.getIstance();
+		NodeState currentState = new NodeState();
+		// set current position
+		currentState.setPosition(dIstance.getPosition());
+		// set sensors value, getting them from the domain
+		currentState.setSensors((List<ISensorSnapshot>) dIstance.getAllSensorValue().values());
+		// set fields value, getting them from the domain
+		currentState.setValues((List<INodeValue>) dIstance.getAllFieldsValue().values());
+		return currentState;
 	}
 
-	@Override
-	public void setNeighbourhood(NodeList neighbourhood) {
-		// TODO Auto-generated method stub
-
-	}
+	/*
+	 * @Override public void setNeighbourhood(NodeList neighbourhood) { // TODO
+	 * Auto-generated method stub
+	 * 
+	 * }
+	 */
 
 }

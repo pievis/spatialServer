@@ -1,9 +1,12 @@
 package it.isac.client.interfaces.managers;
 
-import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
 
 public interface INetworkManager {
+	// Network manager give no ways to add or remove workers from an external
+	// object
 	public NodeState getCurrentState();
-	public void setNeighbourhood(NodeList neighbourhood);
+	// neighbourhood will be set from updateValue method (inherited from
+	// AbstractManager)
+	// public void setNeighbourhood(NodeList neighbourhood);
 }

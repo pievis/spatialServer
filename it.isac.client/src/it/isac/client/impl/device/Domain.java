@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import it.isac.client.interfaces.device.IDomain;
 import it.isac.commons.interfaces.INodeValue;
+import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.NodeState;
 
@@ -12,57 +13,62 @@ import it.isac.commons.model.NodeState;
 // It is also a (concurrent) unified access point
 public class Domain implements IDomain {
 	private static Domain dominio;
-	
+
 	private ConcurrentHashMap<String, INodeValue> fieldsValues;
 	private ConcurrentHashMap<String, NodeState> nbrValues;
 	private ConcurrentHashMap<String, ISensorSnapshot> sensorsValues;
-	
+	private IPosition position;
+
 	// Singleton
 	public static Domain getIstance() {
-		if(dominio == null)
+		if (dominio == null)
 			dominio = new Domain();
 		return dominio;
 	}
-	
-	//constructor
+
+	// constructor
 	private Domain() {
 		fieldsValues = new ConcurrentHashMap<>();
 		nbrValues = new ConcurrentHashMap<>();
 		sensorsValues = new ConcurrentHashMap<>();
 	}
-	
+
 	// Field Modifier
 	@Override
 	public INodeValue getFieldValue(String key) {
 		return fieldsValues.get(key);
 	}
+
 	@Override
 	public HashMap<String, INodeValue> getAllFieldsValue() {
 		return new HashMap<>(fieldsValues); // TODO test
 	}
+
 	@Override
 	public void updateFieldValue(String key, INodeValue value) {
-		if(fieldsValues.containsKey(key))
-			fieldsValues.replace(key, value); //update
+		if (fieldsValues.containsKey(key))
+			fieldsValues.replace(key, value); // update
 		else
-			fieldsValues.put(key, value); //create
+			fieldsValues.put(key, value); // create
 	}
-	
+
 	// Sensor Modifier
 	@Override
 	public ISensorSnapshot getSensorValue(String key) {
 		return sensorsValues.get(key);
 	}
+
 	@Override
 	public HashMap<String, ISensorSnapshot> getAllSensorValue() {
 		return new HashMap<>(sensorsValues); // TODO test
 	}
+
 	@Override
 	public void updateSensorValue(String key, ISensorSnapshot value) {
-		if(sensorsValues.containsKey(key))
-			sensorsValues.replace(key, value); //update
+		if (sensorsValues.containsKey(key))
+			sensorsValues.replace(key, value); // update
 		else
-			sensorsValues.put(key, value); //create
+			sensorsValues.put(key, value); // create
 	}
 
 	// Neighbor Modifier
@@ -70,15 +76,33 @@ public class Domain implements IDomain {
 	public NodeState getNbr(String key) {
 		return nbrValues.get(key);
 	}
+
 	@Override
 	public HashMap<String, NodeState> getAllNbr() {
 		return new HashMap<>(nbrValues); // TODO test
 	}
+
 	@Override
 	public void updateNbr(String key, NodeState value) {
-		if(nbrValues.containsKey(key))
-			nbrValues.replace(key, value); //update
+		if (nbrValues.containsKey(key))
+			nbrValues.replace(key, value); // update
 		else
-			nbrValues.put(key, value); //create
+			nbrValues.put(key, value); // create
+	}
+
+	@Override
+	public void updateAllNbr(HashMap<String, NodeState> newNbr) {
+		nbrValues = new ConcurrentHashMap<>(newNbr); // TODO: test
+	}
+
+	// Position Modifiers
+	@Override
+	public IPosition getPosition() {
+		return position;
+	}
+
+	@Override
+	public void setPosition(IPosition newPosition) {
+		this.position = newPosition;
 	}
 }

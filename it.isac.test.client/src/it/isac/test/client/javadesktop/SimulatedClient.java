@@ -17,7 +17,7 @@ public class SimulatedClient {
 		//dev.addRealSensor(mock2);
 		BasicNodeValue start = new BasicNodeValue("MockWriterField","DummyValue");
 		FieldFunctionMock mockFun = new FieldFunctionMock(start);
-		dev.addField(mockFun);
+		//dev.addField(mockFun);
 		dev.start();
 	}
 
