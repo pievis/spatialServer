@@ -20,10 +20,11 @@ public class CMImplDesktop extends ComManagerImpl implements ICMImplDesktop {
 		SimpleResponse sr = nodesRe.addNode(state); // POST
 		
 		String idNode = "";
-		System.out.println(sr.getMessage());
+		//System.out.println(sr.getMessage());
 		if(sr.isSuccess()) {
 			idNode = ((IdClass)sr.getData()).getId();
 		}
+		System.out.println("Network joined");
 		return idNode;
 	}
 
@@ -32,6 +33,7 @@ public class CMImplDesktop extends ComManagerImpl implements ICMImplDesktop {
 		ClientResource service = new ClientResource(ComManagerFactory.BASEURL);
 		INeighboursResource nbrRes = service.getChild(ComManagerFactory.NETID+"/nodes/"+nodeId+"/nbr/",INeighboursResource.class);
 		NodeList res = nbrRes.represent(); // GET
+		System.out.println("Nbr fetched");
 		return res;
 	}
 
@@ -46,6 +48,7 @@ public class CMImplDesktop extends ComManagerImpl implements ICMImplDesktop {
 		}
 		else
 			System.out.println("Something wrong with the server: external server error");
+		System.out.println("State sent");
 	}
 
 }

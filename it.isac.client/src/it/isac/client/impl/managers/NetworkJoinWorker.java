@@ -11,9 +11,12 @@ public class NetworkJoinWorker extends DeviceJobWorker {
 
 	@Override
 	public void doJob() {
-		NodeState state = ((NetworkManager)this.mng).getCurrentState();
-		String nodeId = ComManagerFactory.getCMIstance().joinNetwork(state);
-		this.val = true;
+		System.out.println("--->Network join worker");
+		NodeState state = ((NetworkManager)mng).getCurrentState();
+		if(state.getPosition() != null) {
+			String nodeId = ComManagerFactory.getCMIstance().joinNetwork(state);
+			this.val = nodeId;
+		}
 	}
 
 }

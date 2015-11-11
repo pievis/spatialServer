@@ -17,6 +17,6 @@ public interface IDevice {
 	public void addSimulatedSensor(ISensor sensor);
 	
 	// Computation manager control methods
-	public void addField(FieldCalculusFunction function, Observer observer);
-	
+	//public void addField(FieldCalculusFunction function, Observer observer);
+	public void addField(FieldCalculusFunction function);
 }

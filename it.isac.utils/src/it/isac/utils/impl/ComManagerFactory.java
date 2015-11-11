@@ -4,7 +4,7 @@ import it.isac.utils.interfaces.IComManagerImpl;
 
 public class ComManagerFactory {
 	// TODO: you can add here some imformation useful to comunicate
-	static final String BASEURL = "http://localhost:8111";
+	static final String BASEURL = "http://192.168.43.87:8111";
 	static final String NETID = "/net0";
 	private static ComunicationManager CMimpl;
 

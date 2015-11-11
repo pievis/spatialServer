@@ -14,6 +14,7 @@ public class NetworkNbrFetcherWorker extends DeviceJobWorker {
 
 	@Override
 	public void doJob() {
+		System.out.println("---> Network worker fetcher");
 		// just fetch the neighbourhood
 		NodeList nbr = ComManagerFactory.getCMIstance().fetchNeighbour(devId);
 		this.val = nbr; // and give it to the manager

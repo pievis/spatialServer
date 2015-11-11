@@ -14,6 +14,7 @@ public class NetworkSenderWorker extends DeviceJobWorker {
 
 	@Override
 	public void doJob() {
+		System.out.println("--->Network worker sender");
 		// get the current state
 		NodeState currentState = ((NetworkManager)this.mng).getCurrentState();
 		// send it accross the network

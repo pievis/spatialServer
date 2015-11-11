@@ -1,5 +1,6 @@
 package it.isac.client.impl.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,12 +37,14 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 	public void updateValue(String id, Object value) {
 		if (value != null) {
 			if (id == joinerId && !((String) value).isEmpty()) {
+				this.stop();
 				workers.remove(0); // remove the joiner worker
 				// save the deviceID in the network
 				deviceId = (String) value;
 				// start new workers
 				workers.add(new NetworkNbrFetcherWorker(nbrFetcherId, this, deviceId));
 				workers.add(new NetworkSenderWorker(senderId, this, deviceId));
+				this.start();
 			} else if (id == nbrFetcherId && !((NodeList) value).isEmpty()) {
 				// Update the domain
 				HashMap<String, NodeState> nbrTable = new HashMap<>();
@@ -65,9 +68,9 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 		// set current position
 		currentState.setPosition(dIstance.getPosition());
 		// set sensors value, getting them from the domain
-		currentState.setSensors((List<ISensorSnapshot>) dIstance.getAllSensorValue().values());
+		currentState.setSensors(new ArrayList<ISensorSnapshot>(dIstance.getAllSensorValue().values()));
 		// set fields value, getting them from the domain
-		currentState.setValues((List<INodeValue>) dIstance.getAllFieldsValue().values());
+		currentState.setValues(new ArrayList<INodeValue>(dIstance.getAllFieldsValue().values()));
 		return currentState;
 	}
 

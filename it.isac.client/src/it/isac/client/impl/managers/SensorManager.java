@@ -1,9 +1,17 @@
 package it.isac.client.impl.managers;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
 import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.ISensorManager;
+import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensor;
 import it.isac.commons.interfaces.ISensorSnapshot;
+import it.isac.commons.model.LatLonPosition;
+import it.isac.commons.model.PositionType;
+import it.isac.commons.model.XYPosition;
 import it.isac.commons.model.sensors.SensorCounterMock;
 import it.isac.commons.model.sensors.SensorType;
 
@@ -33,12 +41,40 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 	public void updateValue(String id, Object value) {
 		// Handle update of the domain
 		ISensorSnapshot sensorVal = (ISensorSnapshot) value;
-		if (sensorVal.getType().contains(SensorType.GPS)){
-			//Domain.getIstance().setPosition();
-		}
-		else
+		if (sensorVal.getType().contains(SensorType.GPS)) {
+			System.out.println("GPS received");
+			// special case for GPS sensor
+			String posType = sensorVal.getType().replace(SensorType.GPS, "");
+			System.out.println("Pos type: "+posType);
+			// let jackson mapper do the conversion
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+			}
+			catch (Exception e) {
+				System.out.println("Sono un eccezione di m****");
+				e.printStackTrace(System.out);
+			}
+			IPosition position = null;
+			System.out.println("GPS VALUE: "+sensorVal.getValue());
+			try {
+				switch (posType) {
+				case PositionType.LATLON:
+					//position = mapper.readValue(sensorVal.getValue(), LatLonPosition.class);
+					break;
+				case PositionType.XY:
+					System.out.println("XY POS: "+sensorVal.getValue());
+					//position = mapper.readValue(sensorVal.getValue(), XYPosition.class);
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+			}
+			if (position != null)
+				Domain.getIstance().setPosition(position);
+		} else {
+			// note that sensorId is used in place of workerId
 			Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
-		// note that sensorId is used in place of workerId
+		}
 	}
 
 	public static void main(String[] args) {
