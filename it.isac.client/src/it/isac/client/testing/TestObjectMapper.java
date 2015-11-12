@@ -1,15 +1,12 @@
 package it.isac.client.testing;
 
 
-
-import it.isac.client.impl.device.Domain;
-import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensorSnapshot;
-import it.isac.commons.model.LatLonPosition;
-import it.isac.commons.model.PositionType;
-import it.isac.commons.model.XYPosition;
+import it.isac.commons.model.Position;
 import it.isac.commons.model.sensors.SensorGPS;
 import it.isac.commons.model.sensors.SensorType;
+
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,29 +21,20 @@ public class TestObjectMapper {
 		// Handle update of the domain
 		ISensorSnapshot sensorVal = (ISensorSnapshot) value;
 		if (sensorVal.getType().contains(SensorType.GPS)) {
-			System.out.println("GPS received");
 			// special case for GPS sensor
-			String posType = sensorVal.getType().replace(SensorType.GPS, "");
-			System.out.println("Pos type: "+posType);
+			System.out.println("GPS received");
 			// let jackson mapper do the conversion
 			ObjectMapper mapper = new ObjectMapper();
-			IPosition position = null;
-			System.out.println("GPS VALUE: "+sensorVal.getValue());
+			Position position = null;
 			try {
-				switch (posType) {
-				case PositionType.LATLON:
-					position = mapper.readValue(sensorVal.getValue(), LatLonPosition.class);
-					break;
-				case PositionType.XY:
-					System.out.println("XY POS: "+sensorVal.getValue());
-					position = mapper.readValue(sensorVal.getValue(), XYPosition.class);
-					break;
-				}
-			} catch (Exception e) {
-				e.printStackTrace(System.out);
-			}
+				position = mapper.readValue(sensorVal.getValue(), Position.class);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+			
 			if (position != null)
-				Domain.getIstance().setPosition(position);
+				System.out.println("Position not null: "+position.toString());
 		}
 		// note that sensorId is used in place of workerId
 		System.out.println("ID: " + sensorVal.getSensorId() + " Val: "+ sensorVal);

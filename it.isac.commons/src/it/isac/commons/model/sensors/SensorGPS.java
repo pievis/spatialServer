@@ -9,7 +9,6 @@ public class SensorGPS implements ISensor {
 	
 	long timeInterval;
 	String id;
-	String type;
 	Thread behaviour;
 	IPosition position;
 	
@@ -17,15 +16,11 @@ public class SensorGPS implements ISensor {
 		this.id = id;
 		// by default position is euclieand coord
 		position = new XYPosition(0,0);
-		// type never change after instantiation
-		type = SensorType.GPS+position.getPositionType();
 	}
 	public SensorGPS(String id, IPosition pos) {
 		this.id = id;
 		//unless otherwise specified
 		this.position = pos;
-		// type never change after instantiation
-		type = SensorType.GPS+position.getPositionType();
 	}
 	
 	public void activateGPS(long waitSec) {
@@ -49,7 +44,7 @@ public class SensorGPS implements ISensor {
 
 	@Override
 	public ISensorSnapshot getValue() {
-		return new BaseSensorSnapshot(id, type, position.toString());
+		return new BaseSensorSnapshot(id, getType(), position.toString());
 	}
 
 	@Override
