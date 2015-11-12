@@ -71,10 +71,10 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 			}
 			if (position != null)
 				Domain.getIstance().setPosition(position);
-		} else {
-			// note that sensorId is used in place of workerId
-			Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
 		}
+		// note that sensorId is used in place of workerId
+		Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
+		
 	}
 
 	public static void main(String[] args) {
