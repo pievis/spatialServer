@@ -20,10 +20,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, 
 include = JsonTypeInfo.As.PROPERTY, 
 defaultImpl = BaseSensorSnapshot.class, //Default conversion
-property = "type" )
+property = "@class" )
 //add subtypes if neccessary
-@JsonSubTypes({ @JsonSubTypes.Type(value = BaseSensorSnapshot.class,
-	name = SensorType.MOCK)})
+//@JsonSubTypes({ @JsonSubTypes.Type(value = BaseSensorSnapshot.class,
+//	name = SensorType.MOCK)})
 public interface ISensorSnapshot {
 	
 	public String getSensorId();
@@ -40,7 +40,6 @@ public interface ISensorSnapshot {
 	 * 
 	 * @return a string indentifying the type of this sensor
 	 */
-	@JsonIgnore
 	public String getType();
 	public void setType(String type);
 }

@@ -53,13 +53,13 @@ public class NodeState {
 			for(int i=1; i<getValues().size(); i++)
 				value += ", "+getValues().get(i).toString();
 		}
-		value += "}, sensors: {";
+		value += "}, sensors: [";
 		if(getSensors() != null && getSensors().size() > 0){
 			value += getSensors().get(0).toString();
 			for(int i=1; i<getSensors().size(); i++)
 				value += ", "+getSensors().get(i).toString();
 		}
-		value += "}]";
+		value += "]]";
 		return value;
 	}
 }
