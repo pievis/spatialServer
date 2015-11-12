@@ -1,6 +1,6 @@
 package it.isac.client.testing;
 
-import org.codehaus.jackson.map.ObjectMapper;
+
 
 import it.isac.client.impl.device.Domain;
 import it.isac.commons.interfaces.IPosition;
@@ -10,6 +10,8 @@ import it.isac.commons.model.PositionType;
 import it.isac.commons.model.XYPosition;
 import it.isac.commons.model.sensors.SensorGPS;
 import it.isac.commons.model.sensors.SensorType;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestObjectMapper {
 

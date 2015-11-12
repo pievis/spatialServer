@@ -2,7 +2,7 @@ package it.isac.commons.model;
 
 import it.isac.commons.interfaces.ILatLonPosition;
 
-public class LatLonPosition implements ILatLonPosition {
+public class LatLonPosition extends Position implements ILatLonPosition {
 
 	double lat, lon;
 	
@@ -31,9 +31,9 @@ public class LatLonPosition implements ILatLonPosition {
 		return lon;
 	}
 	
-	public String toString(){
-		return "[lat:"+lat+",lon:"+lon+"]";
-	}
+//	public String toString(){
+//		return "[lat:"+lat+",lon:"+lon+"]";
+//	}
 
 	public String getPositionType() {
 		return PositionType.LATLON;

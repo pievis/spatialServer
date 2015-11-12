@@ -1,19 +1,15 @@
 package it.isac.client.impl.managers;
 
-import java.io.IOException;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
 import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.ISensorManager;
 import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensor;
 import it.isac.commons.interfaces.ISensorSnapshot;
-import it.isac.commons.model.LatLonPosition;
 import it.isac.commons.model.PositionType;
-import it.isac.commons.model.XYPosition;
 import it.isac.commons.model.sensors.SensorCounterMock;
 import it.isac.commons.model.sensors.SensorType;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SensorManager extends AbstractManager implements ISensorManager {
 	// private List<ISensor> sensors;

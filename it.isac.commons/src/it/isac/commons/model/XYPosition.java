@@ -2,7 +2,7 @@ package it.isac.commons.model;
 
 import it.isac.commons.interfaces.IPosition;
 
-public class XYPosition implements IPosition{
+public class XYPosition extends Position implements IPosition{
 
 	double x,y;
 	
@@ -33,9 +33,9 @@ public class XYPosition implements IPosition{
 	
 	public void setPositionType(String positionType){}
 	
-	public String toString(){
-		return "[x:"+x+",y:"+y+"]";
-	}
+//	public String toString() {
+//		return "[x:" + x + ",y:" + y + "]";
+//	}
 	
 	//Util methods
 	public static double distance(XYPosition p1, XYPosition p2){
