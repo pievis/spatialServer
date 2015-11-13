@@ -1,5 +1,6 @@
 package it.isac.server.testing;
 
+import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.resources.INeighboursResource;
 import it.isac.commons.interfaces.resources.INodeResource;
 import it.isac.commons.interfaces.resources.INodesResource;
@@ -8,9 +9,11 @@ import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
 import it.isac.commons.model.Unit;
+import it.isac.commons.model.nodevalues.BasicNodeValue;
 import it.isac.commons.requestresponse.IdClass;
 import it.isac.commons.requestresponse.SimpleResponse;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.restlet.resource.ClientResource;
@@ -74,6 +77,12 @@ public class ClientTest2 {
 				INodesResource.class);
 		NodeState nodeState = new NodeState();
 		nodeState.setPosition(new LatLonPosition(lat, lon));
+		//Test with random values
+		ArrayList<INodeValue> values = new ArrayList<INodeValue>();
+		values.add(new BasicNodeValue("key1", "value1"));
+		values.add(new BasicNodeValue("key2", Math.random()+""));
+		nodeState.setValues(values);
+		
 		SimpleResponse sr = nodesRes.addNode(nodeState);
 		try {
 			if (sr.isSuccess()) {

@@ -32,7 +32,7 @@ public class MultiClientTest {
 	final static String NET_NAME = "net0";
 
 	public static void main(String args[]) {
-		int updateWait = 500;
+		int updateWait = 8000;
 		if (args.length > 0) {
 			updateWait = Integer.parseInt(args[1]);
 		}
