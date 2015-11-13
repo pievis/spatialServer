@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 90%; }
+      #showInfoBoxBtn {height: 10%; width: 50%; float: left;}
+      #sliderDiv {height: 10%; width: 50%; float: left;}
+      #slider {width: 100%;}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+////////////////////////
+// Starting JS
+////////////////////////
+var map;
+var markers = [];
+var infos = [];
+var showInfoBox = false;
+var updateTime = 2500;
+var nodesUrl = document.URL + "nodes/"
+var defCenter = {lat: 44.1333, lng: 12.2333}
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: defCenter,
+    zoom: 12
+  });
+  //Then start recursive updating
+  updateMarkers();
+}
+
+function updateMarkers(){
+  
+  //fetch nodes on the net and for every node
+  //add it's latlon to markers
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+      var nodes = JSON.parse(xmlhttp.responseText);
+      //var nodes = xmlhttp.responseXML;
+      console.log("request to: " + nodesUrl);
+      updateNodes(nodes);
+    }
+  }
+  xmlhttp.open("GET", nodesUrl, true);
+  xmlhttp.setRequestHeader("media-type", "application/json");
+  xmlhttp.send();
+
+  
+  //repeat after some time
+  setTimeout(updateMarkers, updateTime);
+}
+
+function updateNodes(nodes){
+  clearMarkers();
+  console.log("Nodes: " + nodes);
+  for(var i = 0; i < nodes.length; i++){
+    var position = nodes[i]["state"]["position"];
+    var positionType = position["positionType"];
+    console.log("node_"+i+"_state_positionType: "+positionType);
+    if(positionType === "Lat/Lon"){
+      var lat = position["lat"];
+      var lon = position["lon"];
+      console.log("lat: " + lat + " lon: " + lon);
+      var location = {lat: lat, lng: lon};
+      var values = getValuesStr(nodes[i]["state"]["values"]);
+      addMarker(location, values);
+    }else{
+      console.log("Can't plot something like: " + positionType);
+    }
+  }
+  showMarkers();
+}
+
+function getValuesStr(values){
+  if(values == null)
+    return "No values";
+  var str = "";
+  for(var i = 0; i < values.length; i++){
+    str = str + '<p>'+values[i]["key"] + " => " + values[i]["value"] + "</p>";
+  }
+  return str;
+}
+
+// Adds a marker to the map and push to the array.
+// location = {lat: 44.1333, lng: 12.2333}
+function addMarker(location, snippet) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+
+  var infowindow = new google.maps.InfoWindow({
+  content: snippet
+  });
+  markers.push(marker);
+  infos.push(infowindow);
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+    if(showInfoBox)
+      infos[i].open(map, markers[i]);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+  markers = [];
+  infos = [];
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+//Others for interface
+function toogleBoxs(){
+  showInfoBox = !showInfoBox;
+  //console.log("show box: " + showInfoBox);
+}
+function onSliderChange(val){
+  updateTime = val;
+  document.getElementById('rrp').innerHTML = " Refresh Rate: " + val + " ms";
+}
+///////////////////////////
+//END
+///////////////////////////
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACWuw5xESGKPtIuUhDilFxH3KIDhy7pv0&callback=initMap">
+    </script>
+    <button id="showInfoBoxBtn" onclick="toogleBoxs()">Show / Hide InfoBoxs</button>
+    <div id="sliderDiv">
+      <p id="rrp"> Refresh Rate: 2500 ms</p>
+    <input id="slider" type="range" min="2500" max="80000" step="1000" onchange="onSliderChange(this.value)" />
+  </div>
+  </body>
+</html>
