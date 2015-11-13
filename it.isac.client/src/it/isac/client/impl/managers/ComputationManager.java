@@ -18,14 +18,15 @@ public class ComputationManager extends AbstractManager implements IComputationM
 	}
 
 	@Override
-	public void updateValue(String id, Object value) {
+	public void updateValue(String workerId, Object value) {
 		// update a single field
-		Domain.getIstance().updateFieldValue(id, (INodeValue)value);		
+		Domain.getIstance().updateFieldValue(workerId, (INodeValue)value);		
 	}
 
 	@Override
 	public void addField(FieldCalculusFunction function) {
 		String workerId = "field"+nextWorkerId;
+		// set the staring value
 		Domain.getIstance().updateFieldValue(workerId,function.getStarting());
 		this.workers.add(new ComputationWorker(workerId, this, function));
 		nextWorkerId++;
