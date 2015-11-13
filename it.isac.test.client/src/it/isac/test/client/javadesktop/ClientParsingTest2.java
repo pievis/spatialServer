@@ -1,10 +1,9 @@
-package it.isac.utils.test;
+package it.isac.test.client.javadesktop;
 
 import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.interfaces.resources.INodesResource;
 import it.isac.commons.model.NodeState;
-import it.isac.commons.model.Unit;
 import it.isac.commons.model.XYPosition;
 import it.isac.commons.model.nodevalues.BasicNodeValue;
 import it.isac.commons.model.sensors.SensorCounterMock;
@@ -24,7 +23,7 @@ import org.restlet.resource.ClientResource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ClientParsingTest {
+public class ClientParsingTest2 {
 
 	final static ObjectMapper mapper = new ObjectMapper();
 

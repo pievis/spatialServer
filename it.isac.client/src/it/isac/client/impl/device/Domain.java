@@ -8,6 +8,7 @@ import it.isac.commons.interfaces.INodeValue;
 import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.NodeState;
+import it.isac.commons.model.XYPosition;
 
 // This class represent the current state of the domain. 
 // It is also a (concurrent) unified access point
@@ -17,7 +18,7 @@ public class Domain implements IDomain {
 	private ConcurrentHashMap<String, INodeValue> fieldsValues;
 	private ConcurrentHashMap<String, NodeState> nbrValues;
 	private ConcurrentHashMap<String, ISensorSnapshot> sensorsValues;
-	private IPosition position;
+	private IPosition position = new XYPosition(0, 6);
 
 	// Singleton
 	public static Domain getIstance() {

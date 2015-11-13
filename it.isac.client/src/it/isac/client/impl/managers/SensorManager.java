@@ -2,6 +2,7 @@ package it.isac.client.impl.managers;
 
 import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.ISensorManager;
+import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensor;
 import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.Position;
@@ -40,11 +41,11 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 		ISensorSnapshot sensorVal = (ISensorSnapshot) value;
 		if (sensorVal.getType().contains(SensorType.GPS)) {
 			// special case for GPS sensor
-			Position position = null;
+			IPosition position = null;
 			// let jackson mapper do the conversion
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				position = mapper.readValue(sensorVal.getValue(), Position.class);
+				position = mapper.readValue(sensorVal.getValue(), IPosition.class);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

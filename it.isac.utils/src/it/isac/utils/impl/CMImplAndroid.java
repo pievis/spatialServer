@@ -6,19 +6,16 @@ import it.isac.utils.interfaces.ICMImplAndroid;
 
 public class CMImplAndroid extends ComManagerImpl implements ICMImplAndroid {
 
-	@Override
 	public String joinNetwork(NodeState state) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public NodeList fetchNeighbour(String nodeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void sendState(String nodeId, NodeState state) {
 		// TODO Auto-generated method stub
 		

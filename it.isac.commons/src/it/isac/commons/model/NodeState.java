@@ -46,8 +46,11 @@ public class NodeState {
 	@JsonIgnore
 	public String toString(){
 		String value = "";
-		value += "[pos: " + position.toString() +
-				", values: {";
+		
+		value += "[";
+		if(getPosition() != null)
+				value += "pos: " + position.toString() + ", ";
+		value+= "values: {";
 		if(getValues() != null && getValues().size() > 0){
 			value += getValues().get(0).toString();
 			for(int i=1; i<getValues().size(); i++)

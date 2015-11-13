@@ -1,8 +1,5 @@
 package it.isac.test.client.javadesktop;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import it.isac.client.impl.device.Device;
 import it.isac.commons.model.nodevalues.BasicNodeValue;
 import it.isac.commons.model.sensors.SensorCounterMock;
@@ -21,12 +18,12 @@ public class SimulatedClient {
 		SensorCounterMock mock2 = new SensorCounterMock("mock1");
 		mock2.startCounting(700);
 		SensorGPS gpsMock = new SensorGPS("gpsMock");
-		dev.addRealSensor(mock);
+		//dev.addRealSensor(mock);
 		//dev.addRealSensor(mock2);
-		dev.addRealSensor(gpsMock);
+		//dev.addRealSensor(gpsMock);
 		BasicNodeValue start = new BasicNodeValue("MockWriterField","DummyValue");
 		FieldFunctionMock mockFun = new FieldFunctionMock(start);
-		dev.addField(mockFun);
+		//dev.addField(mockFun);
 		dev.start();
 	}
 }

@@ -1,9 +1,5 @@
 package it.isac.client.impl.managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import it.isac.client.impl.device.Domain;
 import it.isac.client.interfaces.managers.INetworkManager;
 import it.isac.commons.interfaces.INodeValue;
@@ -11,8 +7,12 @@ import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
+import it.isac.commons.model.Position;
 import it.isac.utils.impl.ComManagerFactory;
 import it.isac.utils.impl.ComunicationManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NetworkManager extends AbstractManager implements INetworkManager {
 	ComunicationManager manager; // proxy-like

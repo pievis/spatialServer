@@ -31,9 +31,10 @@ public class LatLonPosition extends Position implements ILatLonPosition {
 		return lon;
 	}
 	
-//	public String toString(){
-//		return "[lat:"+lat+",lon:"+lon+"]";
-//	}
+	@Override
+	public String toString(){
+		return "[lat:"+lat+",lon:"+lon+"]";
+	}
 
 	public String getPositionType() {
 		return PositionType.LATLON;
