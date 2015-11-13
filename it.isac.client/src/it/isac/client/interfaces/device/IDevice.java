@@ -5,7 +5,7 @@ import java.util.Observer;
 import it.isac.client.impl.device.FieldCalculusFunction;
 import it.isac.commons.interfaces.ISensor;
 
-public interface IDevice {
+public interface IDevice extends Observer {
 	
 	// Computation control methods
 	public void start();
@@ -17,6 +17,6 @@ public interface IDevice {
 	public void addSimulatedSensor(ISensor sensor);
 	
 	// Computation manager control methods
-	//public void addField(FieldCalculusFunction function, Observer observer);
-	public void addField(FieldCalculusFunction function);
+	public void addField(FieldCalculusFunction function, Observer fieldViewer);
+	//public void addField(FieldCalculusFunction function);
 }

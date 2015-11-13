@@ -1,5 +1,8 @@
 package it.isac.test.client.javadesktop;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import it.isac.client.impl.device.Device;
 import it.isac.commons.model.nodevalues.BasicNodeValue;
 import it.isac.commons.model.sensors.SensorCounterMock;
@@ -24,10 +27,28 @@ public class SimulatedClient {
 		dev.addRealSensor(mock);
 		dev.addRealSensor(gpsMock);
 		// create starting value
-		BasicNodeValue start = new BasicNodeValue("MockWriterField","DummyValue");
+		BasicNodeValue start = new BasicNodeValue("MockCounterField", "1");
 		// create and add mock field
-		FieldFunctionMock mockFun = new FieldFunctionMock(start);
-		dev.addField(mockFun);
+		FieldFunctionMock mockFun1 = new FieldFunctionMock(start);
+		FieldFunctionMock mockFun2 = new FieldFunctionMock(start);
+		Observer mockObserver1 = new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				System.out.println("New value received from 1");
+				System.out.println((String) arg);
+			}
+		};
+		Observer mockObserver2 = new Observer() {
+
+			@Override
+			public void update(Observable o, Object arg) {
+				System.out.println("New value received from 2");
+				System.out.println((String) arg);
+			}
+		};
+		dev.addField(mockFun1, mockObserver1);
+		dev.addField(mockFun2, mockObserver2);
 		dev.start();
 	}
 }

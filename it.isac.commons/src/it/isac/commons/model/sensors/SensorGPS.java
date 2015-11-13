@@ -1,6 +1,8 @@
 package it.isac.commons.model.sensors;
 
 import java.util.Random;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import it.isac.commons.interfaces.IPosition;
 import it.isac.commons.interfaces.ISensor;
@@ -11,11 +13,10 @@ import it.isac.commons.model.XYPosition;
 
 public class SensorGPS implements ISensor {
 
-	long timeInterval;
 	String id;
 	Thread behaviour;
 	IPosition position;
-	int counter;
+	ScheduledThreadPoolExecutor exec;
 
 	public SensorGPS(String id) {
 		this.id = id;
@@ -32,36 +33,33 @@ public class SensorGPS implements ISensor {
 	}
 
 	private void init() {
+		exec = new ScheduledThreadPoolExecutor(1);
 		// despite the name, what this sensor do is mocking a GPS
 		behaviour = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (counter < 100) {
-					// random walk
-					Random rnd = new Random();
-					switch (position.getPositionType()) {
-					case PositionType.XY:
-						((XYPosition) position).setX(rnd.nextDouble() * 1.5);
-						((XYPosition) position).setY(rnd.nextDouble() * 1.5);
-						break;
-					case PositionType.LATLON:
-						((LatLonPosition) position).setLat(rnd.nextDouble() * 1.5);
-						((LatLonPosition) position).setLon(rnd.nextDouble() * 1.5);
-						break;
-					}
-					counter++; // repeat for a while
-					try {
-						Thread.sleep(timeInterval);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				// random walk
+				Random rnd = new Random();
+				switch (position.getPositionType()) {
+				case PositionType.XY:
+					((XYPosition) position).setX(rnd.nextDouble() * 1.5);
+					((XYPosition) position).setY(rnd.nextDouble() * 1.5);
+					break;
+				case PositionType.LATLON:
+					((LatLonPosition) position).setLat(rnd.nextDouble() * 1.5);
+					((LatLonPosition) position).setLon(rnd.nextDouble() * 1.5);
+					break;
 				}
 			}
 		});
 	}
-
+// Control Methods
 	public void activateGPS(long waitSec) {
-		behaviour.start();
+		exec.scheduleAtFixedRate(behaviour, waitSec, waitSec, TimeUnit.MILLISECONDS);
+	}
+
+	public void stopGPS() {
+		exec.shutdown();
 	}
 
 	@Override

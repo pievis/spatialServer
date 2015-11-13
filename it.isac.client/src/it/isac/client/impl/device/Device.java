@@ -1,5 +1,6 @@
 package it.isac.client.impl.device;
 
+import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,14 +11,15 @@ import it.isac.client.interfaces.device.IDevice;
 import it.isac.commons.interfaces.ISensor;
 
 public class Device implements IDevice {
-	
-	Long freq; // scheduling frequency of the workers
+
+	// Device is both observer and observable
 	ConcurrentHashMap<String, Observer> observers;
 	SensorManager sensorMng;
 	ComputationManager computatorMng;
 	NetworkManager networkMng;
 	int nextFunctionIndex = 0;
-	
+	Long freq; // scheduling frequency of the workers
+
 	public Device(Long frequency) {
 		this.freq = frequency;
 		init();
@@ -27,6 +29,10 @@ public class Device implements IDevice {
 		sensorMng = new SensorManager(freq);
 		computatorMng = new ComputationManager(freq);
 		networkMng = new NetworkManager(freq);
+		// Device is observer for every function
+		computatorMng.addObserver(this);
+		// device is not a real observable: it just keep track of every observer
+		observers = new ConcurrentHashMap<>();
 	}
 
 	@Override
@@ -36,6 +42,7 @@ public class Device implements IDevice {
 		computatorMng.start();
 		networkMng.start();
 	}
+
 	@Override
 	public void stop() {
 		// Tell to every manager to stop (pause) their worker
@@ -43,6 +50,7 @@ public class Device implements IDevice {
 		computatorMng.stop();
 		networkMng.stop();
 	}
+
 	@Override
 	public void dispose() {
 		// Tell to every manager to dispose (halt) their worker
@@ -56,6 +64,7 @@ public class Device implements IDevice {
 		// add a real sensor
 		sensorMng.addSensor(sensor);
 	}
+
 	@Override
 	public void addSimulatedSensor(ISensor sensor) {
 		// add a simulated sensor
@@ -65,12 +74,24 @@ public class Device implements IDevice {
 	}
 
 	@Override
-	public void addField(FieldCalculusFunction function) {
+	public void addField(FieldCalculusFunction function, Observer fieldWatcher) {
 		// Set function IDENTIFIER
-		String functionId = "func"+nextFunctionIndex; // a more sophisticated approach is required
-		computatorMng.addField(function); // add field to be computed
-		//observers.put(functionId, observer); // add observer to notify the viewer
+		String functionId = "func" + nextFunctionIndex; // a more sophisticated
+														// approach is required
+		computatorMng.addField(function, functionId); // add field to be
+														// computed
+		observers.put(functionId, fieldWatcher); // add observer to notify the
+													// viewer
 		nextFunctionIndex++;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		String fieldId = (String)arg; // use the field id to get the value
+		
+		String fieldValue = Domain.getIstance().getFieldValue(fieldId).getValue();
+		// and to send the value to the appropriate observer
+		observers.get(fieldId).update(null, fieldValue);
 	}
 
 }

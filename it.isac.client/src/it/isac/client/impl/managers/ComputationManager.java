@@ -1,6 +1,8 @@
 package it.isac.client.impl.managers;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Observer;
 
 import it.isac.client.impl.device.Domain;
 import it.isac.client.impl.device.FieldCalculusFunction;
@@ -11,25 +13,28 @@ import it.isac.commons.model.NodeState;
 
 public class ComputationManager extends AbstractManager implements IComputationManager {
 
-	int nextWorkerId = 0;
-	
+	ArrayList<Observer> observers;
+
 	public ComputationManager(Long initFreq) {
 		super(initFreq);
+		observers = new ArrayList<>();
 	}
 
 	@Override
 	public void updateValue(String workerId, Object value) {
-		// update a single field
-		Domain.getIstance().updateFieldValue(workerId, (INodeValue)value);		
+		if (value != null) {
+			// update a single field
+			Domain.getIstance().updateFieldValue(workerId, (INodeValue) value);
+			notifyChange(workerId);
+		}
 	}
 
 	@Override
-	public void addField(FieldCalculusFunction function) {
-		String workerId = "field"+nextWorkerId;
+	public void addField(FieldCalculusFunction function, String functionId) {
 		// set the staring value
-		Domain.getIstance().updateFieldValue(workerId,function.getStarting());
-		this.workers.add(new ComputationWorker(workerId, this, function));
-		nextWorkerId++;
+		Domain.getIstance().updateFieldValue(functionId, function.getStarting());
+		this.workers.add(new ComputationWorker(functionId, this, function));
+
 	}
 
 	@Override
@@ -45,6 +50,17 @@ public class ComputationManager extends AbstractManager implements IComputationM
 	@Override
 	public Map<String, ISensorSnapshot> getSensorsValue() {
 		return Domain.getIstance().getAllSensorValue();
+	}
+
+	@Override
+	public void addObserver(Observer observer) {
+		observers.add(observer);
+	}
+
+	@Override
+	public void notifyChange(String fieldId) {
+		for (Observer e : observers)
+			e.update(null, fieldId);
 	}
 
 }
