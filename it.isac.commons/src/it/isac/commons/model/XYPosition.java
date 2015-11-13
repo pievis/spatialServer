@@ -33,10 +33,10 @@ public class XYPosition extends Position implements IPosition{
 	
 	public void setPositionType(String positionType){}
 	
-	@Override
-	public String toString() {
-		return "[x:" + x + ",y:" + y + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "[x:" + x + ",y:" + y + "]";
+//	}
 	
 	//Util methods
 	public static double distance(XYPosition p1, XYPosition p2){

@@ -23,6 +23,14 @@ public class FieldFunctionMock extends FieldCalculusFunction {
 //		System.out.println("Id: " + localCurrentStates.getKey());
 //		System.out.println("Value: " + localCurrentStates.getValue());
 //		System.out.println();
+//		
+//		System.out.println("NbrValue: ");
+//		for(String k : nbrState.keySet()) {
+//			System.out.println("Key:"+k);
+//			System.out.println(nbrState.get(k).toString());
+//		}
+//		System.out.println();
+//		
 //		System.out.println("Sensor Value: ");
 //		for (String k : localSensors.keySet()) {
 //			System.out.println("Key: " + k);
@@ -30,7 +38,7 @@ public class FieldFunctionMock extends FieldCalculusFunction {
 //			System.out.println("Type: " + localSensors.get(k).getType());
 //			System.out.println("Value: " + localSensors.get(k).getValue());
 //		}
-//		System.out.println();
+		System.out.println();
 		return new BasicNodeValue(localCurrentStates.getKey(), localCurrentStates.getValue());
 	}
 }

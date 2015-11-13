@@ -7,7 +7,6 @@ import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.Node;
 import it.isac.commons.model.NodeList;
 import it.isac.commons.model.NodeState;
-import it.isac.commons.model.Position;
 import it.isac.utils.impl.ComManagerFactory;
 import it.isac.utils.impl.ComunicationManager;
 
@@ -34,9 +33,9 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 	}
 
 	@Override
-	public void updateValue(String id, Object value) {
+	public void updateValue(String workerId, Object value) {
 		if (value != null) {
-			if (id == joinerId && !((String) value).isEmpty()) {
+			if (workerId == joinerId && !((String) value).isEmpty()) {
 				this.stop();
 				workers.remove(0); // remove the joiner worker
 				// save the deviceID in the network
@@ -45,7 +44,7 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 				workers.add(new NetworkNbrFetcherWorker(nbrFetcherId, this, deviceId));
 				workers.add(new NetworkSenderWorker(senderId, this, deviceId));
 				this.start();
-			} else if (id == nbrFetcherId && !((NodeList) value).isEmpty()) {
+			} else if (workerId == nbrFetcherId && !((NodeList) value).isEmpty()) {
 				// Update the domain
 				HashMap<String, NodeState> nbrTable = new HashMap<>();
 				NodeList nbr = (NodeList) value;
@@ -73,12 +72,5 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 		currentState.setValues(new ArrayList<INodeValue>(dIstance.getAllFieldsValue().values()));
 		return currentState;
 	}
-
-	/*
-	 * @Override public void setNeighbourhood(NodeList neighbourhood) { // TODO
-	 * Auto-generated method stub
-	 * 
-	 * }
-	 */
 
 }

@@ -18,7 +18,8 @@ public class Domain implements IDomain {
 	private ConcurrentHashMap<String, INodeValue> fieldsValues;
 	private ConcurrentHashMap<String, NodeState> nbrValues;
 	private ConcurrentHashMap<String, ISensorSnapshot> sensorsValues;
-	private IPosition position = new XYPosition(0, 6);
+	//private IPosition position = new XYPosition(0, 0);
+	private IPosition position = null;
 
 	// Singleton
 	public static Domain getIstance() {
@@ -42,7 +43,7 @@ public class Domain implements IDomain {
 
 	@Override
 	public HashMap<String, INodeValue> getAllFieldsValue() {
-		return new HashMap<>(fieldsValues); // TODO test
+		return new HashMap<>(fieldsValues);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class Domain implements IDomain {
 
 	@Override
 	public HashMap<String, ISensorSnapshot> getAllSensorValue() {
-		return new HashMap<>(sensorsValues); // TODO test
+		return new HashMap<>(sensorsValues);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class Domain implements IDomain {
 
 	@Override
 	public HashMap<String, NodeState> getAllNbr() {
-		return new HashMap<>(nbrValues); // TODO test
+		return new HashMap<>(nbrValues); 
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class Domain implements IDomain {
 
 	@Override
 	public void updateAllNbr(HashMap<String, NodeState> newNbr) {
-		nbrValues = new ConcurrentHashMap<>(newNbr); // TODO: test
+		nbrValues = new ConcurrentHashMap<>(newNbr); 
 	}
 
 	// Position Modifiers

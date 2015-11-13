@@ -48,5 +48,5 @@ public abstract class AbstractManager implements IManager {
 		schedulerExecutorService.shutdown();
 	}
 	
-	public abstract void updateValue(String id, Object value);
+	public abstract void updateValue(String workerId, Object value);
 }

@@ -36,7 +36,7 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 	}
 
 	@Override
-	public void updateValue(String id, Object value) {
+	public void updateValue(String workerId, Object value) {
 		// Handle update of the domain
 		ISensorSnapshot sensorVal = (ISensorSnapshot) value;
 		if (sensorVal.getType().contains(SensorType.GPS)) {
@@ -53,8 +53,8 @@ public class SensorManager extends AbstractManager implements ISensorManager {
 			if (position != null)
 				Domain.getIstance().setPosition(position);
 		}
-		// note that sensorId is used in place of workerId
-		Domain.getIstance().updateSensorValue(sensorVal.getSensorId(), sensorVal);
+		// note that workerId is used in place of sensorId
+		Domain.getIstance().updateSensorValue(workerId, sensorVal);
 
 	}
 
