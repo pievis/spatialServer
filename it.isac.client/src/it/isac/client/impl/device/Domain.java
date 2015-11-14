@@ -19,6 +19,7 @@ public class Domain implements IDomain {
 	private ConcurrentHashMap<String, NodeState> nbrValues;
 	private ConcurrentHashMap<String, ISensorSnapshot> sensorsValues;
 	//private IPosition position = new XYPosition(0, 0);
+	private final Object posLock = new Object();
 	private IPosition position = null;
 
 	// Singleton
@@ -97,14 +98,21 @@ public class Domain implements IDomain {
 		nbrValues = new ConcurrentHashMap<>(newNbr); 
 	}
 
-	// Position Modifiers
+	/**
+	 * Position Modifiers:
+	 * variable position can be accessed from both computation manager and sensor manager,
+	 * hence a synchronized block is required 
+	 * */
 	@Override
 	public IPosition getPosition() {
-		return position;
+		synchronized (posLock) {
+			return position;
+		}
 	}
-
 	@Override
 	public void setPosition(IPosition newPosition) {
-		this.position = newPosition;
+		synchronized (posLock) {
+			this.position = newPosition;
+		}
 	}
 }

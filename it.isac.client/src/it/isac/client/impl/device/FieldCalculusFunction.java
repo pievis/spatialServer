@@ -9,7 +9,7 @@ import it.isac.commons.interfaces.ISensorSnapshot;
 import it.isac.commons.model.NodeState;
 
 public abstract class FieldCalculusFunction {
-	protected ExecutionContext<?> execContext;
+	private ExecutionContext<?> execContext;
 	private INodeValue startVal;
 
 	public FieldCalculusFunction(INodeValue startingValue) {

@@ -4,9 +4,12 @@ import java.util.Observable;
 import java.util.Observer;
 
 import it.isac.client.impl.device.Device;
+import it.isac.client.impl.device.ExecutionContext;
+import it.isac.client.impl.device.XYExecContext;
 import it.isac.commons.model.nodevalues.BasicNodeValue;
 import it.isac.commons.model.sensors.SensorCounterMock;
 import it.isac.commons.model.sensors.SensorGPS;
+import it.isac.commons.model.sensors.SensorSource;
 import it.isac.utils.impl.CMImplDesktop;
 import it.isac.utils.impl.ComManagerFactory;
 
@@ -23,14 +26,19 @@ public class SimulatedClient {
 		// create gps mock
 		SensorGPS gpsMock = new SensorGPS("gpsMock");
 		gpsMock.activateGPS(1000);
+		SensorSource source = new SensorSource("source");
+		source.setOn();
 		// add sensors
 		dev.addRealSensor(mock);
 		dev.addRealSensor(gpsMock);
+		dev.addRealSensor(source);
 		// create starting value
 		BasicNodeValue start = new BasicNodeValue("MockCounterField", "1");
+		BasicNodeValue gradStart = new BasicNodeValue("distGrad", "inf");
 		// create and add mock field
 		FieldFunctionMock mockFun1 = new FieldFunctionMock(start);
-		FieldFunctionMock mockFun2 = new FieldFunctionMock(start);
+		GradientFunction grad = new GradientFunction(gradStart);
+		grad.setExecutionContext(new XYExecContext());
 		Observer mockObserver1 = new Observer() {
 
 			@Override
@@ -43,12 +51,12 @@ public class SimulatedClient {
 
 			@Override
 			public void update(Observable o, Object arg) {
-				System.out.println("New value received from 2");
+				System.out.print("Gradient Value: ");
 				System.out.println((String) arg);
 			}
 		};
 		dev.addField(mockFun1, mockObserver1);
-		dev.addField(mockFun2, mockObserver2);
+		dev.addField(grad, mockObserver2);
 		dev.start();
 	}
 }
