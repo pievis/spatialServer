@@ -27,4 +27,8 @@ public interface IDomain {
 	// Position Modifier
 	public IPosition getPosition();
 	public void setPosition(IPosition newPosition);
+	
+	//NodeId
+	public String getNodeId();
+	public void setNodeId(String nodeId);
 }

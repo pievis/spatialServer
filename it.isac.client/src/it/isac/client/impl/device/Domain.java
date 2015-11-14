@@ -21,6 +21,7 @@ public class Domain implements IDomain {
 	//private IPosition position = new XYPosition(0, 0);
 	private final Object posLock = new Object();
 	private IPosition position = null;
+	String nodeId;
 
 	// Singleton
 	public static Domain getIstance() {
@@ -115,4 +116,14 @@ public class Domain implements IDomain {
 			this.position = newPosition;
 		}
 	}
+
+	public String getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(String nodeId) {
+		this.nodeId = nodeId;
+	}
+	
+	
 }

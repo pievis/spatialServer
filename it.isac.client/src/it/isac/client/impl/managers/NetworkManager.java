@@ -19,7 +19,7 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 	private final String nbrFetcherId = "nbrFetcher";
 	private final String senderId = "stateSender";
 
-	private String deviceId;
+	//private String deviceId;
 
 	public NetworkManager(Long initFreq) {
 		super(initFreq);
@@ -39,7 +39,8 @@ public class NetworkManager extends AbstractManager implements INetworkManager {
 				this.stop();
 				workers.remove(0); // remove the joiner worker
 				// save the deviceID in the network
-				deviceId = (String) value;
+				String deviceId = (String) value;
+				Domain.getIstance().setNodeId(deviceId);
 				// start new workers
 				workers.add(new NetworkNbrFetcherWorker(nbrFetcherId, this, deviceId));
 				workers.add(new NetworkSenderWorker(senderId, this, deviceId));

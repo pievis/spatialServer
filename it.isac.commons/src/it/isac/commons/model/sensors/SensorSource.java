@@ -5,7 +5,7 @@ import it.isac.commons.interfaces.ISensorSnapshot;
 
 public class SensorSource implements ISensor {
 	String id;
-	boolean active;
+	boolean active = false;
 	
 	public SensorSource(String sensorId) {
 		this.id = sensorId;

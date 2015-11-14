@@ -48,6 +48,7 @@ public class SensorGPS implements ISensor {
 				case PositionType.LATLON:
 					((LatLonPosition) position).setLat(rnd.nextDouble() * 1.5);
 					((LatLonPosition) position).setLon(rnd.nextDouble() * 1.5);
+					System.out.print("+");
 					break;
 				}
 			}
